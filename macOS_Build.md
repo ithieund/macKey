@@ -57,3 +57,25 @@ Bấm Next để chọn nơi lưu trữ file Build. Vậy là xong, bạn đã c
 Lưu ý: trong quá trình build, nếu XCode bão lỗi `invalid in C99`, khả năng cao là ở trong file `MJAccessibilityUtils.m`, dòng 26 `isEnabled = AXAPIEnabled();`, bạn lên đầu file thêm khai báo `extern BOOL AXAPIEnabled();` là sẽ build được.
 
 Chúc các bạn Build OhMyKey cho macOS thành công!
+
+## Phát triển giao diện
+
+Giao diện được viết bằng SwiftUI (yêu cầu macOS 13 trở lên). Vì macOS gắn quyền
+Accessibility với chữ ký của ứng dụng, mà chữ ký ad-hoc lại thay đổi sau mỗi lần build,
+nên bản vừa build luôn thoát ngay khi khởi động để xin quyền lại. Để xem giao diện mà
+không phải cấp quyền:
+
+```bash
+cd Sources/OhMyKey/macOS
+./scripts/preview-ui.sh              # build Debug, chụp ảnh cả 4 cửa sổ
+./scripts/preview-ui.sh --lang en    # xem bản tiếng Anh
+```
+
+Chế độ này (`OMK_UI_ONLY=1`) bỏ qua phần xin quyền, bỏ qua event tap và bỏ qua kiểm tra
+"đã chạy rồi", nên nó chạy song song với bản đang dùng và không gõ được gì.
+
+Chạy unit test:
+
+```bash
+./scripts/run-tests.sh
+```
