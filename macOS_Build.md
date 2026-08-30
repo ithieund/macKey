@@ -1,7 +1,42 @@
+## Build nhanh để chạy thử trên máy (dòng lệnh)
+
+Nếu bạn chỉ muốn build rồi chạy thử bản vừa sửa, dùng script:
+
+```
+cd Sources/OhMyKey/macOS
+./scripts/build-and-install.sh          # Release
+./scripts/build-and-install.sh Debug    # Debug
+```
+
+Script build rồi cài thẳng vào `/Applications/OhMyKey.app`, sau đó chạy bằng
+`open -a OhMyKey`.
+
+Vì sao cài vào `/Applications` thay vì bấm Run trong Xcode: OhMyKey cần quyền
+Accessibility, mà macOS gắn quyền này với **chữ ký** và **đường dẫn** của ứng dụng.
+Xcode build vào thư mục DerivedData thay đổi liên tục nên lần nào cũng phải cấp
+quyền lại.
+
+Lưu ý: bản build này chỉ được ký ad-hoc (`CODE_SIGN_IDENTITY=-`), mà chữ ký ad-hoc
+được tính từ chính file binary — nên **mỗi lần build lại là một danh tính mới** và
+macOS sẽ không nhận quyền đã cấp trước đó. Khi ứng dụng vừa mở đã tắt ngay, cấp lại
+quyền như sau:
+
+```
+tccutil reset Accessibility com.hungdoansy.ohmykey
+open -a OhMyKey     # bấm "Cấp quyền", rồi bật OhMyKey trong danh sách
+```
+
+Ký bằng chứng chỉ Developer ID thật thì quyền sẽ giữ nguyên qua các lần build.
+
+Ngoài ra, nhớ **tắt hẳn bộ gõ khác** (OpenKey, EVKey, UniKey...) trước khi chạy, vì
+hai bộ gõ chạy cùng lúc sẽ tranh nhau từng phím gõ.
+
 ## Cách build cho macOS:
-Vì một số lý do mà OhMyKey không thể đưa lêp Mac App Store được, nếu các bạn không yên tâm về file build chính thức từ tác giả, các bạn có thể tải mã nguồn về tự build lấy OhMyKey cho mình. 
+
+Vì một số lý do mà OhMyKey không thể đưa lêp Mac App Store được, nếu các bạn không yên tâm về file build chính thức từ tác giả, các bạn có thể tải mã nguồn về tự build lấy OhMyKey cho mình.
 
 Yêu cầu:
+
 - macOS Mojave trở lên.
 - XCode 10 trở lên.
 
