@@ -34,8 +34,6 @@
 	<string>Used for keyboard</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2026 Hung Doan. Based on OpenKey © 2019 Tuyen Mai. Licensed under GPL.</string>
-	<key>NSMainStoryboardFile</key>
-	<string>Main</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

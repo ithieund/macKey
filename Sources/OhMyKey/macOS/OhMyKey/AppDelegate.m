@@ -13,12 +13,12 @@
 #include <libproc.h>
 #include <sys/proc_info.h>
 #import "AppDelegate.h"
-#import "ViewController.h"
 #import "OhMyKeyManager.h"
 #import "MJAccessibilityUtils.h"
+#import "OhMyKeyBridge.h"
+#import "OhMyKey-Swift.h"
 
 AppDelegate* appDelegate;
-extern ViewController* viewController;
 extern void OnTableCodeChange(void);
 extern void OnInputMethodChanged(void);
 extern void RequestNewSession(void);
@@ -66,11 +66,6 @@ extern bool convertToolDontAlertWhenCompleted;
 
 
 @implementation AppDelegate {
-    NSWindowController *_mainWC;
-    NSWindowController *_macroWC;
-    NSWindowController *_convertWC;
-    NSWindowController *_aboutWC;
-    
     NSStatusItem *statusItem;
     NSMenu *theMenu;
     
@@ -163,6 +158,13 @@ static void migrateLegacyDefaultsIfNeeded(void) {
     [[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithInt: 50]
                                               forKey: @"NSInitialToolTipDelay"];
     
+#ifdef DEBUG
+    // Debug-only escape hatch for looking at the UI; see UIPreviewHarness.swift.
+    BOOL uiOnly = [OMKUIPreviewHarness isEnabled];
+#else
+    BOOL uiOnly = NO;
+#endif
+
     //check whether this app has been launched before that or not
     //Only check instances owned by current user (for multi-user/Fast User Switching support)
     uid_t currentUID = getuid();
@@ -183,13 +185,13 @@ static void migrateLegacyDefaultsIfNeeded(void) {
         }
     }
 
-    if (alreadyRunning) {
+    if (alreadyRunning && !uiOnly) {
         [NSApp terminate:nil];
         return;
     }
     
     // check if user granted Accessabilty permission
-    if (!MJAccessibilityIsEnabled()) {
+    if (!uiOnly && !MJAccessibilityIsEnabled()) {
         [self askPermission];
         return;
     }
@@ -204,8 +206,22 @@ static void migrateLegacyDefaultsIfNeeded(void) {
     if (vSwitchKeyStatus & 0x8000)
         NSBeep();
 
+    [OMKMainMenu install];
     [self createStatusBarMenu];
     
+    if (uiOnly) {
+#ifdef DEBUG
+        // Everything except the one thing that needs permission: settings are loaded and
+        // the status menu is built, so the preview exercises the same wiring as a real
+        // launch, it just cannot see or send a keystroke.
+        [OMKBridge loadSettingsOnly];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [OMKUIPreviewHarness run];
+        });
+#endif
+        return;
+    }
+
     //init
     dispatch_async(dispatch_get_main_queue(), ^{
         if (![OhMyKeyManager initEventTap]) {
@@ -362,7 +378,7 @@ static void migrateLegacyDefaultsIfNeeded(void) {
     [[NSUserDefaults standardUserDefaults] setInteger:1 forKey:@"RunOnStartup"];
 
     [self fillData];
-    [viewController fillData];
+    [OMKBridge notifySettingsChanged];
 }
 
 -(void)setRunOnStartup:(BOOL)val {
@@ -381,12 +397,7 @@ static void migrateLegacyDefaultsIfNeeded(void) {
 #pragma mark -Dock icon
 
 -(BOOL)hasVisibleAppWindow {
-    for (NSWindowController *wc in @[_mainWC ?: (id)[NSNull null], _macroWC ?: (id)[NSNull null],
-                                     _convertWC ?: (id)[NSNull null], _aboutWC ?: (id)[NSNull null]]) {
-        if ([wc isKindOfClass:[NSWindowController class]] && [wc isWindowLoaded] && [wc.window isVisible])
-            return YES;
-    }
-    return NO;
+    return [OMKWindowManager shared].hasVisibleWindow;
 }
 
 // Regular (Dock icon) only while one of our windows is open and the user allows it;
@@ -404,16 +415,6 @@ static void migrateLegacyDefaultsIfNeeded(void) {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateDockIconVisibility];
     });
-}
-
--(void)presentWindow:(NSWindow *)window {
-    if ([window isVisible])
-        return;
-    if (vShowIconOnDock)
-        [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
-    [NSApp activateIgnoringOtherApps:YES];
-    [window makeKeyAndOrderFront:nil];
-    [window setLevel:NSFloatingWindowLevel];
 }
 
 #pragma mark -StatusBar menu data
@@ -520,7 +521,7 @@ static void migrateLegacyDefaultsIfNeeded(void) {
     [[NSUserDefaults standardUserDefaults] setInteger:intInputMethod forKey:@"InputMethod"];
 
     [self fillData];
-    [viewController fillData];
+    [OMKBridge notifySettingsChanged];
     
     if (willNotify)
         OnInputMethodChanged();
@@ -540,14 +541,14 @@ static void migrateLegacyDefaultsIfNeeded(void) {
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:@"InputType"];
     vInputType = index;
     [self fillData];
-    [viewController fillData];
+    [OMKBridge notifySettingsChanged];
 }
 
 - (void)onCodeTableChanged:(int)index {
     [[NSUserDefaults standardUserDefaults] setInteger:index forKey:@"CodeTable"];
     vCodeTable = index;
     [self fillData];
-    [viewController fillData];
+    [OMKBridge notifySettingsChanged];
     OnTableCodeChange();
 }
 
@@ -557,10 +558,9 @@ static void migrateLegacyDefaultsIfNeeded(void) {
 }
 
 -(void)onConvertTool {
-    if (_convertWC == nil) {
-        _convertWC = [[NSStoryboard storyboardWithName:@"Main" bundle:nil] instantiateControllerWithIdentifier:@"ConvertWindow"];
-    }
-    [self presentWindow:_convertWC.window];
+    if (vShowIconOnDock)
+        [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+    [[OMKWindowManager shared] showConvertTool];
 }
 
 -(void)onQuickConvert {
@@ -573,31 +573,28 @@ static void migrateLegacyDefaultsIfNeeded(void) {
     }
 }
 
--(void) onControlPanelSelected {
-    if (_mainWC == nil) {
-        _mainWC = [[NSStoryboard storyboardWithName:@"Main" bundle:nil] instantiateControllerWithIdentifier:@"OhMyKey"];
-    }
-    [self presentWindow:_mainWC.window];
+-(void)onControlPanelSelected {
+    if (vShowIconOnDock)
+        [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+    [[OMKWindowManager shared] showSettings];
 }
 
--(void) onMacroSelected {
-    if (_macroWC == nil) {
-        _macroWC = [[NSStoryboard storyboardWithName:@"Main" bundle:nil] instantiateControllerWithIdentifier:@"MacroWindow"];
-    }
-    [self presentWindow:_macroWC.window];
+-(void)onMacroSelected {
+    if (vShowIconOnDock)
+        [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+    [[OMKWindowManager shared] showMacros];
 }
 
--(void) onAboutSelected {
-    if (_aboutWC == nil) {
-        _aboutWC = [[NSStoryboard storyboardWithName:@"Main" bundle:nil] instantiateControllerWithIdentifier:@"AboutWindow"];
-    }
-    [self presentWindow:_aboutWC.window];
+-(void)onAboutSelected {
+    if (vShowIconOnDock)
+        [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+    [[OMKWindowManager shared] showAbout];
 }
 
 #pragma mark -Short key event
 -(void)onSwitchLanguage {
     [self onInputMethodSelected];
-    [viewController fillData];
+    [OMKBridge notifySettingsChanged];
 }
 
 #pragma mark Reset OhMyKey after mac computer awake

@@ -75,8 +75,8 @@ typedef NS_ENUM(NSInteger, OMKConvertCase) {
 
 #pragma mark - Toggles
 
-+ (BOOL)isOn:(OMKToggle)toggle;
-+ (void)setOn:(BOOL)value toggle:(OMKToggle)toggle;
++ (BOOL)isToggleOn:(OMKToggle)toggle NS_SWIFT_NAME(isOn(_:));
++ (void)setOn:(BOOL)value toggle:(OMKToggle)toggle NS_SWIFT_NAME(setOn(_:toggle:));
 
 #pragma mark - Input mode
 

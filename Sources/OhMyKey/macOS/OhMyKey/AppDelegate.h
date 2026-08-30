@@ -7,7 +7,6 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "ViewController.h"
 
 #define OHMYKEY_BUNDLE @"com.hungdoansy.ohmykey"
 
@@ -32,7 +31,10 @@
 
 -(void)setGrayIcon:(BOOL)val;
 
+-(void)onControlPanelSelected;
 -(void)onMacroSelected;
+-(void)onConvertTool;
+-(void)onAboutSelected;
 -(void)onQuickConvert;
 -(void)setQuickConvertString;
 

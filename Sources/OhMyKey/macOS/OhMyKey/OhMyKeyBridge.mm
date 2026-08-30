@@ -105,7 +105,7 @@ static NSUserDefaults *defaults(void) {
 
 #pragma mark - Toggles
 
-+ (BOOL)isOn:(OMKToggle)toggle {
++ (BOOL)isToggleOn:(OMKToggle)toggle {
     const OMKToggleSpec *spec = specFor(toggle);
     if (!spec) {
         return NO;
