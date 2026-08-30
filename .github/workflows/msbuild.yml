@@ -8,7 +8,7 @@ on:
 
 env:
   # Path to the solution file relative to the root of the project.
-  SOLUTION_FILE_PATH: .\Sources\OpenKey\win32\OpenKey
+  SOLUTION_FILE_PATH: .\Sources\OhMyKey\win32\OhMyKey
 
   # Configuration type to build.
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
@@ -38,13 +38,13 @@ jobs:
       id: upload
       uses: actions/upload-artifact@v4
       with:
-        name: OpenKey
+        name: OhMyKey
         path: |
           ${{env.SOLUTION_FILE_PATH}}/Release/
           ${{env.SOLUTION_FILE_PATH}}/x64/Release/
 
     outputs:
-      subject-name: OpenKey
+      subject-name: OhMyKey
       subject-digest: ${{steps.upload.outputs.artifact-digest}}
 
   attest:

@@ -1,9 +1,9 @@
 //
 //  MyTextField.h
-//  OpenKey
+//  OhMyKey
 //
 //  Created by Tuyen on 7/30/19.
-//  Copyright © 2019 Tuyen Mai. All rights reserved.
+//  Copyright © 2019 Tuyen Mai (OpenKey). Fork: OhMyKey © 2026 Hung Doan. GPL.
 //
 
 #import <Cocoa/Cocoa.h>

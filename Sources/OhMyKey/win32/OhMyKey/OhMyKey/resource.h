@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by OpenKey.rc
+// Used by OhMyKey.rc
 //
 #define IDI_APP_ICON                    1
 #define IDC_MYICON                      2
@@ -8,7 +8,7 @@
 #define IDBUTTON_OK                     2
 #define IDOK3                           3
 #define IDBUTTON_EXIT                   3
-#define IDD_OPENKEY_DIALOG              102
+#define IDD_OHMYKEY_DIALOG              102
 #define IDS_APP_TITLE                   103
 #define IDD_ABOUTBOX                    103
 #define IDM_ABOUT                       104
@@ -18,7 +18,7 @@
 #define IDS_STRING_CONVERT_COMPLETED    106
 #define IDS_MAIN_DIALOG_TITLE           107
 #define IDS_STRING_MODERN_ORTHORGRAPHY  108
-#define IDC_OPENKEY                     109
+#define IDC_OHMYKEY                     109
 #define IDS_STRING_MORDEN_ORTHORGRAPHY  110
 #define IDS_STRING_FIX_BROWSER          111
 #define IDS_STRING_SPELLING_CHECK       112
@@ -36,7 +36,7 @@
 #define IDS_STRING_RUN_AS_ADMIN         124
 #define IDS_STRING_CHECK_UPDATE         125
 #define IDS_STRING_REMEMBER_TABLE_CODE  126
-#define IDS_STRING_TEMP_OFF_OPENKEY     127
+#define IDS_STRING_TEMP_OFF_OHMYKEY     127
 #define IDR_MAINFRAME                   128
 #define IDS_STRING_FIX_CHROMIUM         128
 #define IDD_DIALOG_MAIN                 129

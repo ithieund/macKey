@@ -57,7 +57,7 @@
     <ClInclude Include="MainControlDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OpenKeyManager.h">
+    <ClInclude Include="OhMyKeyManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\engine\platforms\mac.h">
@@ -69,7 +69,7 @@
     <ClInclude Include="..\..\..\engine\platforms\win32.h">
       <Filter>engine\platforms</Filter>
     </ClInclude>
-    <ClInclude Include="OpenKeyHelper.h">
+    <ClInclude Include="OhMyKeyHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SystemTrayHelper.h">
@@ -116,13 +116,13 @@
     <ClCompile Include="MainControlDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OpenKeyManager.cpp">
+    <ClCompile Include="OhMyKeyManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OpenKey.cpp">
+    <ClCompile Include="OhMyKey.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OpenKeyHelper.cpp">
+    <ClCompile Include="OhMyKeyHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SystemTrayHelper.cpp">
@@ -139,7 +139,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="OpenKey.rc">
+    <ResourceCompile Include="OhMyKey.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

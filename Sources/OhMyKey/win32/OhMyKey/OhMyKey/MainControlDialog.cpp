@@ -1,12 +1,12 @@
 ﻿/*----------------------------------------------------------
-OpenKey - The Cross platform Open source Vietnamese Keyboard application.
+OhMyKey - The Cross platform Open source Vietnamese Keyboard application.
 
-Copyright (C) 2019 Mai Vu Tuyen
-Contact: maivutuyen.91@gmail.com
-Github: https://github.com/tuyenvm/OpenKey
-Fanpage: https://www.facebook.com/OpenKeyVN
+Copyright (C) 2019 Mai Vu Tuyen (original OpenKey)
+Copyright (C) 2026 Hung Doan (OhMyKey fork)
+Github: https://github.com/hungdoansy/OhMyKey
+Based on OpenKey: https://github.com/tuyenvm/OpenKey
 
-This file is belong to the OpenKey project, Win32 version
+This file is belong to the OhMyKey project, Win32 version
 which is released under GPL license.
 You can fork, modify, improve this program. If you
 redistribute your new version, it MUST be open source.
@@ -36,12 +36,12 @@ void MainControlDialog::initDialog() {
     TCHAR title[256];
     TCHAR titleBuffer[256];
     LoadString(hIns, IDS_MAIN_DIALOG_TITLE, title, 256);
-    wsprintfW(titleBuffer, title, OpenKeyHelper::getVersionString().c_str());
+    wsprintfW(titleBuffer, title, OhMyKeyHelper::getVersionString().c_str());
     SetWindowText(hDlg, titleBuffer);
 
     //input type
     comboBoxInputType = GetDlgItem(hDlg, IDC_COMBO_INPUT_TYPE);
-    vector<LPCTSTR>& inputType = OpenKeyManager::getInputType();
+    vector<LPCTSTR>& inputType = OhMyKeyManager::getInputType();
     for (int i = 0; i < inputType.size(); i++) {
         SendMessage(comboBoxInputType, CB_ADDSTRING, i, reinterpret_cast<LPARAM>(inputType[i]));
     }
@@ -49,7 +49,7 @@ void MainControlDialog::initDialog() {
 
     //code table
     comboBoxTableCode = GetDlgItem(hDlg, IDC_COMBO_TABLE_CODE);
-    vector<LPCTSTR>& tableCode = OpenKeyManager::getTableCode();
+    vector<LPCTSTR>& tableCode = OhMyKeyManager::getTableCode();
     for (int i = 0; i < tableCode.size(); i++) {
         SendMessage(comboBoxTableCode, CB_ADDSTRING, i, reinterpret_cast<LPARAM>(tableCode[i]));
     }
@@ -144,8 +144,8 @@ void MainControlDialog::initDialog() {
     checkAllowOtherLanguages = GetDlgItem(hTabPage1, IDC_CHECK_OTHER_LANGUAGES);
     createToolTip(checkAllowOtherLanguages, IDS_STRING_OTHER_LANGUAGES);
 
-    checkTempOffOpenKey = GetDlgItem(hTabPage1, IDC_CHECK_TEMP_OFF_OPEN_KEY);
-    createToolTip(checkTempOffOpenKey, IDS_STRING_TEMP_OFF_OPENKEY);
+    checkTempOffOhMyKey = GetDlgItem(hTabPage1, IDC_CHECK_TEMP_OFF_OPEN_KEY);
+    createToolTip(checkTempOffOhMyKey, IDS_STRING_TEMP_OFF_OHMYKEY);
 
     /*------------end tab 1----------------*/
 
@@ -219,13 +219,13 @@ INT_PTR MainControlDialog::eventProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
             AppDelegate::getInstance()->closeDialog(this);
             break;
         case IDBUTTON_EXIT:
-            AppDelegate::getInstance()->onOpenKeyExit();
+            AppDelegate::getInstance()->onOhMyKeyExit();
             break;
         case ID_BTN_DEFAULT: {
             int msgboxID = MessageBox(
                 hDlg,
                 _T("Bạn có chắc chắn muốn thiết lập lại cài đặt gốc?"),
-                _T("OpenKey"),
+                _T("OhMyKey"),
                 MB_ICONEXCLAMATION | MB_YESNO
             );
             if (msgboxID == IDYES) {
@@ -240,7 +240,7 @@ INT_PTR MainControlDialog::eventProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
             onUpdateButton();
             break;
         case IDC_BUTTON_GO_SOURCE_CODE:
-            ShellExecute(NULL, _T("open"), _T("https://github.com/tuyenvm/OpenKey"), NULL, NULL, SW_SHOWNORMAL);
+            ShellExecute(NULL, _T("open"), _T("https://github.com/hungdoansy/OhMyKey"), NULL, NULL, SW_SHOWNORMAL);
             break;
         default:
             if (HIWORD(wParam) == CBN_SELCHANGE) {
@@ -250,9 +250,9 @@ INT_PTR MainControlDialog::eventProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
                 this->onCheckboxClicked((HWND)lParam);
             }
             else if (HIWORD(wParam) == EN_CHANGE) {
-                _lastKeyCode = OpenKeyManager::_lastKeyCode;
+                _lastKeyCode = OhMyKeyManager::_lastKeyCode;
                 if (_lastKeyCode > 0) {
-                    OpenKeyManager::_lastKeyCode = 0;
+                    OhMyKeyManager::_lastKeyCode = 0;
                     this->onCharacter((HWND)lParam, _lastKeyCode);
                 }
             }
@@ -269,11 +269,11 @@ INT_PTR MainControlDialog::eventProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
         case NM_RETURN: {
             PNMLINK link = (PNMLINK)lParam;
             if (link->hdr.idFrom == IDC_SYSLINK_HOME_PAGE)
-                ShellExecute(NULL, _T("open"), _T("http://open-key.org"), NULL, NULL, SW_SHOWNORMAL);
+                ShellExecute(NULL, _T("open"), _T("https://github.com/hungdoansy/OhMyKey"), NULL, NULL, SW_SHOWNORMAL);
             else if (link->hdr.idFrom == IDC_SYSLINK_FANPAGE)
-                ShellExecute(NULL, _T("open"), _T("https://www.facebook.com/OpenKeyVN"), NULL, NULL, SW_SHOWNORMAL);
+                ShellExecute(NULL, _T("open"), _T("https://github.com/hungdoansy/OhMyKey/issues"), NULL, NULL, SW_SHOWNORMAL);
             else if (link->hdr.idFrom == IDC_SYSLINK_AUTHOR_EMAIL)
-                ShellExecute(NULL, _T("open"), _T("mailto:maivutuyen.91@gmail.com"), NULL, NULL, SW_SHOWNORMAL);
+                ShellExecute(NULL, _T("open"), _T("https://github.com/hungdoansy"), NULL, NULL, SW_SHOWNORMAL);
             break;
         }
         }
@@ -350,7 +350,7 @@ void MainControlDialog::fillData() {
     SendMessage(checkQuickEndConsonant, BM_SETCHECK, vQuickEndConsonant ? 1 : 0, 0);
     SendMessage(checkRememberTableCode, BM_SETCHECK, vRememberCode ? 1 : 0, 0);
     SendMessage(checkAllowOtherLanguages, BM_SETCHECK, vOtherLanguage ? 1 : 0, 0);
-    SendMessage(checkTempOffOpenKey, BM_SETCHECK, vTempOffOpenKey ? 1 : 0, 0);
+    SendMessage(checkTempOffOhMyKey, BM_SETCHECK, vTempOffOhMyKey ? 1 : 0, 0);
 
     SendMessage(checkSmartSwitchKey, BM_SETCHECK, vUseSmartSwitchKey ? 1 : 0, 0);
     SendMessage(checkCapsFirstChar, BM_SETCHECK, vUpperCaseFirstChar ? 1 : 0, 0);
@@ -373,7 +373,7 @@ void MainControlDialog::fillData() {
 
     //tab info
     wchar_t buffer[256];
-    wsprintfW(buffer, _T("Phiên bản %s cho Windows - Ngày cập nhật: %s"), OpenKeyHelper::getVersionString().c_str(), _T(__DATE__));
+    wsprintfW(buffer, _T("Phiên bản %s cho Windows - Ngày cập nhật: %s"), OhMyKeyHelper::getVersionString().c_str(), _T(__DATE__));
     SendDlgItemMessage(hTabPage4, IDC_STATIC_APP_VERSION_INFO, WM_SETTEXT, 0, LPARAM(buffer));
 }
 
@@ -392,7 +392,7 @@ void MainControlDialog::onComboBoxSelected(const HWND& hCombobox, const int& com
     else if (hCombobox == comboBoxTableCode) {
         APP_SET_DATA(vCodeTable, (int)SendMessage(hCombobox, CB_GETCURSEL, 0, 0));
         if (vRememberCode) {
-            setAppInputMethodStatus(OpenKeyHelper::getFrontMostAppExecuteName(), vLanguage | (vCodeTable << 1));
+            setAppInputMethodStatus(OhMyKeyHelper::getFrontMostAppExecuteName(), vLanguage | (vCodeTable << 1));
             saveSmartSwitchKeyData();
         }
     }
@@ -435,7 +435,7 @@ void MainControlDialog::onCheckboxClicked(const HWND& hWnd) {
         val = (int)SendMessage(checkVietnamese, BM_GETCHECK, 0, 0);
         APP_SET_DATA(vLanguage, val ? 1 : 0);
         if (vUseSmartSwitchKey) {
-            setAppInputMethodStatus(OpenKeyHelper::getFrontMostAppExecuteName(), vLanguage | (vCodeTable << 1));
+            setAppInputMethodStatus(OhMyKeyHelper::getFrontMostAppExecuteName(), vLanguage | (vCodeTable << 1));
             saveSmartSwitchKeyData();
         }
     }
@@ -443,7 +443,7 @@ void MainControlDialog::onCheckboxClicked(const HWND& hWnd) {
         val = (int)SendMessage(checkVietnamese, BM_GETCHECK, 0, 0);
         APP_SET_DATA(vLanguage, val ? 1 : 0);
         if (vUseSmartSwitchKey) {
-            setAppInputMethodStatus(OpenKeyHelper::getFrontMostAppExecuteName(), vLanguage | (vCodeTable << 1));
+            setAppInputMethodStatus(OhMyKeyHelper::getFrontMostAppExecuteName(), vLanguage | (vCodeTable << 1));
             saveSmartSwitchKeyData();
         }
     }
@@ -463,7 +463,7 @@ void MainControlDialog::onCheckboxClicked(const HWND& hWnd) {
     else if (hWnd == checkRunWithWindows) {
         val = (int)SendMessage(hWnd, BM_GETCHECK, 0, 0);
         APP_SET_DATA(vRunWithWindows, val ? 1 : 0);
-        OpenKeyHelper::registerRunOnStartup(vRunWithWindows);
+        OhMyKeyHelper::registerRunOnStartup(vRunWithWindows);
     }
     else if (hWnd == checkSpelling) {
         val = (int)SendMessage(hWnd, BM_GETCHECK, 0, 0);
@@ -534,7 +534,7 @@ void MainControlDialog::onCheckboxClicked(const HWND& hWnd) {
         APP_SET_DATA(vCreateDesktopShortcut, val ? 1 : 0);
         //create desktop shortcut
         if (val)
-            OpenKeyManager::createDesktopShortcut();
+            OhMyKeyManager::createDesktopShortcut();
     }
     else if (hWnd == checkRunAsAdmin) {
         val = (int)SendMessage(hWnd, BM_GETCHECK, 0, 0);
@@ -553,9 +553,9 @@ void MainControlDialog::onCheckboxClicked(const HWND& hWnd) {
         val = (int)SendMessage(hWnd, BM_GETCHECK, 0, 0);
         APP_SET_DATA(vOtherLanguage, val ? 1 : 0);
     }
-    else if (hWnd == checkTempOffOpenKey) {
+    else if (hWnd == checkTempOffOhMyKey) {
         val = (int)SendMessage(hWnd, BM_GETCHECK, 0, 0);
-        APP_SET_DATA(vTempOffOpenKey, val ? 1 : 0);
+        APP_SET_DATA(vTempOffOhMyKey, val ? 1 : 0);
     }
     else if (hWnd == checkFixChromium) {
         val = (int)SendMessage(hWnd, BM_GETCHECK, 0, 0);
@@ -603,50 +603,50 @@ void MainControlDialog::onTabIndexChanged() {
 void MainControlDialog::onUpdateButton() {
     EnableWindow(hUpdateButton, false);
     string newVersion;
-    if (OpenKeyManager::checkUpdate(newVersion)) {
+    if (OhMyKeyManager::checkUpdate(newVersion)) {
         WCHAR msg[256];
         wsprintf(msg,
-            TEXT("OpenKey Có phiên bản mới (%s), bạn có muốn cập nhật không?"),
+            TEXT("OhMyKey Có phiên bản mới (%s), bạn có muốn cập nhật không?"),
             utf8ToWideString(newVersion).c_str());
 
         int msgboxID = MessageBox(
             hDlg,
             msg,
-            _T("OpenKey Update"),
+            _T("OhMyKey Update"),
             MB_ICONEXCLAMATION | MB_YESNO
         );
         if (msgboxID == IDYES) {
-            //Call OpenKeyUpdate
+            //Call OhMyKeyUpdate
             WCHAR path[MAX_PATH];
             GetCurrentDirectory(MAX_PATH, path);
-            wsprintf(path, TEXT("%s\\OpenKeyUpdate.exe"), path);
+            wsprintf(path, TEXT("%s\\OhMyKeyUpdate.exe"), path);
             ShellExecute(0, L"", path, 0, 0, SW_SHOWNORMAL);
 
-            AppDelegate::getInstance()->onOpenKeyExit();
+            AppDelegate::getInstance()->onOhMyKeyExit();
         }
 
     }
     else {
-        MessageBox(hDlg, _T("Bạn đang dùng phiên bản mới nhất!"), _T("OpenKey Update"), MB_OK);
+        MessageBox(hDlg, _T("Bạn đang dùng phiên bản mới nhất!"), _T("OhMyKey Update"), MB_OK);
     }
     EnableWindow(hUpdateButton, true);
 }
 
 void MainControlDialog::requestRestartAsAdmin() {
-    OpenKeyHelper::registerRunOnStartup(false);
+    OhMyKeyHelper::registerRunOnStartup(false);
     if (vRunAsAdmin && !IsUserAnAdmin()) {
         int msgboxID = MessageBox(
             hDlg,
-            _T("Bạn cần phải khởi động lại OpenKey để kích hoạt chế độ Admin!\nBạn có muốn khởi động lại OpenKey không?"),
-            _T("OpenKey"),
+            _T("Bạn cần phải khởi động lại OhMyKey để kích hoạt chế độ Admin!\nBạn có muốn khởi động lại OhMyKey không?"),
+            _T("OhMyKey"),
             MB_ICONEXCLAMATION | MB_YESNO
         );
         if (msgboxID == IDYES) {
             PostQuitMessage(0);
-            ShellExecute(0, L"runas", OpenKeyHelper::getFullPath().c_str(), 0, 0, SW_SHOWNORMAL);
+            ShellExecute(0, L"runas", OhMyKeyHelper::getFullPath().c_str(), 0, 0, SW_SHOWNORMAL);
         }
     }
     else {
-        OpenKeyHelper::registerRunOnStartup(vRunWithWindows);
+        OhMyKeyHelper::registerRunOnStartup(vRunWithWindows);
     }
 }

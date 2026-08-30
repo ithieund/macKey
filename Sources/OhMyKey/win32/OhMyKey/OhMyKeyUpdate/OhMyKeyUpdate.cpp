@@ -1,19 +1,19 @@
 ﻿/*----------------------------------------------------------
-OpenKey - The Cross platform Open source Vietnamese Keyboard application.
+OhMyKey - The Cross platform Open source Vietnamese Keyboard application.
 
-Copyright (C) 2019 Mai Vu Tuyen
-Contact: maivutuyen.91@gmail.com
-Github: https://github.com/tuyenvm/OpenKey
-Fanpage: https://www.facebook.com/OpenKeyVN
+Copyright (C) 2019 Mai Vu Tuyen (original OpenKey)
+Copyright (C) 2026 Hung Doan (OhMyKey fork)
+Github: https://github.com/hungdoansy/OhMyKey
+Based on OpenKey: https://github.com/tuyenvm/OpenKey
 
-This file is belong to the OpenKey project, Win32 version
+This file is belong to the OhMyKey project, Win32 version
 which is released under GPL license.
 You can fork, modify, improve this program. If you
 redistribute your new version, it MUST be open source.
 -----------------------------------------------------------*/
 
 #include "framework.h"
-#include "OpenKeyUpdate.h"
+#include "OhMyKeyUpdate.h"
 #include <Urlmon.h>
 #include <fstream>
 #include <sstream>
@@ -53,7 +53,7 @@ INT_PTR CALLBACK MainDialogProcess(HWND hDlg, UINT message, WPARAM wParam, LPARA
     UNREFERENCED_PARAMETER(lParam);
 	switch (message) {
 	case WM_INITDIALOG:{
-		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_OPENKEYUPDATE));
+		HICON hIcon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(IDI_OHMYKEYUPDATE));
 		if (hIcon) {
 			SendMessage(hDlg, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
 		}
@@ -75,8 +75,8 @@ DWORD WINAPI UpdateThreadFunction(LPVOID lpParam) {
 	WCHAR path[MAX_PATH];
 	WCHAR currentDir[MAX_PATH];
 	GetCurrentDirectory(MAX_PATH, currentDir);
-	wsprintf(path, TEXT("%s\\_OpenKey.tempf"), currentDir);
-	HRESULT res = URLDownloadToFile(NULL, L"https://raw.githubusercontent.com/tuyenvm/OpenKey/master/version.json", path, 0, NULL);
+	wsprintf(path, TEXT("%s\\_OhMyKey.tempf"), currentDir);
+	HRESULT res = URLDownloadToFile(NULL, L"https://raw.githubusercontent.com/hungdoansy/OhMyKey/master/version.json", path, 0, NULL);
 
 	wstring data;
 	if (res == S_OK) {
@@ -87,7 +87,7 @@ DWORD WINAPI UpdateThreadFunction(LPVOID lpParam) {
 		DeleteFile(path);
 		data = buffer.str();
 	} else {
-		MessageBox(hDlg, _T("Có lỗi trong quá trình cập nhật, vui lòng thử lại sau!"), _T("OpenKey Update"), MB_OK);
+		MessageBox(hDlg, _T("Có lỗi trong quá trình cập nhật, vui lòng thử lại sau!"), _T("OhMyKey Update"), MB_OK);
 		ExitProcess(0);
 		return 0;
 	}
@@ -102,28 +102,28 @@ DWORD WINAPI UpdateThreadFunction(LPVOID lpParam) {
 	
 	//download zip file
 	WCHAR updateUrl[MAX_PATH];
-	wsprintf(updateUrl, TEXT("https://github.com/tuyenvm/OpenKey/releases/download/%s/OpenKey%s-Windows.zip"),
+	wsprintf(updateUrl, TEXT("https://github.com/hungdoansy/OhMyKey/releases/download/%s/OhMyKey%s-Windows.zip"),
 		versionName.c_str(),
 		versionName.c_str());
-	wsprintf(path, TEXT("%s\\_OpenKeyUpdate.zip"), currentDir);
+	wsprintf(path, TEXT("%s\\_OhMyKeyUpdate.zip"), currentDir);
 	res = URLDownloadToFile(NULL, updateUrl, path, 0, NULL);
 
 	if (res == S_OK) {
 		//remove old file
-		DeleteFile(L"OpenKey64.exe");
+		DeleteFile(L"OhMyKey64.exe");
 		//extract zip file
-		WinExec("powershell.exe -NoP -NonI -Command \"Expand-Archive '.\\_OpenKeyUpdate.zip' '.\\_OpenKeyUpdate'\" ", SW_HIDE);
+		WinExec("powershell.exe -NoP -NonI -Command \"Expand-Archive '.\\_OhMyKeyUpdate.zip' '.\\_OhMyKeyUpdate'\" ", SW_HIDE);
 		Sleep(5000);
-		MoveFile(L"_OpenKeyUpdate\\OpenKey64.exe", L"OpenKey64.exe");
+		MoveFile(L"_OhMyKeyUpdate\\OhMyKey64.exe", L"OhMyKey64.exe");
 		DeleteFile(path);
-		DeleteFile(L"_OpenKeyUpdate\\OpenKeyUpdate.exe");
-		DeleteFile(L"_OpenKeyUpdate\\OpenKey64.exe");
-		DeleteFile(L"_OpenKeyUpdate\\OpenKey32.exe");
-		RemoveDirectory(L".\\_OpenKeyUpdate");
-		MessageBox(hDlg, _T("Bạn đã cập nhật OpenKey bản mới nhất thành công!"), _T("OpenKey Update"), MB_OK);
+		DeleteFile(L"_OhMyKeyUpdate\\OhMyKeyUpdate.exe");
+		DeleteFile(L"_OhMyKeyUpdate\\OhMyKey64.exe");
+		DeleteFile(L"_OhMyKeyUpdate\\OhMyKey32.exe");
+		RemoveDirectory(L".\\_OhMyKeyUpdate");
+		MessageBox(hDlg, _T("Bạn đã cập nhật OhMyKey bản mới nhất thành công!"), _T("OhMyKey Update"), MB_OK);
 		ExitProcess(0);
 	} else {
-		MessageBox(hDlg, _T("Có lỗi trong quá trình cập nhật, vui lòng thử lại sau!"), _T("OpenKey Update"), MB_OK);
+		MessageBox(hDlg, _T("Có lỗi trong quá trình cập nhật, vui lòng thử lại sau!"), _T("OhMyKey Update"), MB_OK);
 		ExitProcess(0);
 	}
 	return 0;

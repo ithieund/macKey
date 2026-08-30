@@ -1,9 +1,9 @@
 //
 //  MJAccessibilityUtils.m
-//  OpenKey
+//  OhMyKey
 //
 //  Created by Nguyen Tan Thong on 18/9/19.
-//  Copyright © 2019 Tuyen Mai. All rights reserved.
+//  Copyright © 2019 Tuyen Mai (OpenKey). Fork: OhMyKey © 2026 Hung Doan. GPL.
 //
 //  Source: https://github.com/Hammerspoon/hammerspoon/blob/master/Hammerspoon/MJAccessibilityUtils.m
 //  License: MIT

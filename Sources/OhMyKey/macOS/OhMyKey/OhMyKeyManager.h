@@ -1,19 +1,19 @@
 //
-//  OpenKeyManager.h
-//  ModernKey
+//  OhMyKeyManager.h
+//  OhMyKey
 //
 //  Created by Tuyen on 1/27/19.
-//  Copyright © 2019 Tuyen Mai. All rights reserved.
+//  Copyright © 2019 Tuyen Mai (OpenKey). Fork: OhMyKey © 2026 Hung Doan. GPL.
 //
 
-#ifndef OpenKeyManager_h
-#define OpenKeyManager_h
+#ifndef OhMyKeyManager_h
+#define OhMyKeyManager_h
 
 #import <Cocoa/Cocoa.h>
 
 typedef void (^CheckNewVersionCallback)(void);
 
-@interface OpenKeyManager : NSObject
+@interface OhMyKeyManager : NSObject
 +(BOOL)isInited;
 +(BOOL)initEventTap;
 +(BOOL)stopEventTap;
@@ -28,4 +28,4 @@ typedef void (^CheckNewVersionCallback)(void);
 +(void)checkNewVersion:(NSWindow*)parent callbackFunc:(CheckNewVersionCallback) callback;
 @end
 
-#endif /* OpenKeyManager_h */
+#endif /* OhMyKeyManager_h */

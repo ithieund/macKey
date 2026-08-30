@@ -1,12 +1,12 @@
 ﻿/*----------------------------------------------------------
-OpenKey - The Cross platform Open source Vietnamese Keyboard application.
+OhMyKey - The Cross platform Open source Vietnamese Keyboard application.
 
-Copyright (C) 2019 Mai Vu Tuyen
-Contact: maivutuyen.91@gmail.com
-Github: https://github.com/tuyenvm/OpenKey
-Fanpage: https://www.facebook.com/OpenKeyVN
+Copyright (C) 2019 Mai Vu Tuyen (original OpenKey)
+Copyright (C) 2026 Hung Doan (OhMyKey fork)
+Github: https://github.com/hungdoansy/OhMyKey
+Based on OpenKey: https://github.com/tuyenvm/OpenKey
 
-This file is belong to the OpenKey project, Win32 version
+This file is belong to the OhMyKey project, Win32 version
 which is released under GPL license.
 You can fork, modify, improve this program. If you
 redistribute your new version, it MUST be open source.
@@ -126,7 +126,7 @@ void MacroDialog::saveAndReload() {
 	//save
 	vector<Byte> macroData;
 	getMacroSaveData(macroData);
-	OpenKeyHelper::setRegBinary(_T("macroData"), macroData.data(), (int)macroData.size());
+	OhMyKeyHelper::setRegBinary(_T("macroData"), macroData.data(), (int)macroData.size());
 
 	//reload data
 	fillData();
@@ -165,7 +165,7 @@ void MacroDialog::onAddMacroButton() {
 	wstring content = buffer;
 
 	if (name.compare(L"") == 0 || content.compare(L"") == 0) {
-		MessageBox(hDlg, _T("Bạn hãy nhập từ cần gõ tắt!"), _T("OpenKey"), MB_OK);
+		MessageBox(hDlg, _T("Bạn hãy nhập từ cần gõ tắt!"), _T("OhMyKey"), MB_OK);
 		return;
 	}
 
@@ -182,7 +182,7 @@ void MacroDialog::onDeleteMacroButton() {
 	wstring name = buffer;
 
 	if (name.compare(L"") == 0) {
-		MessageBox(hDlg, _T("Bạn hãy chọn từ cần xoá!"), _T("OpenKey"), MB_OK);
+		MessageBox(hDlg, _T("Bạn hãy chọn từ cần xoá!"), _T("OhMyKey"), MB_OK);
 		return;
 	}
 

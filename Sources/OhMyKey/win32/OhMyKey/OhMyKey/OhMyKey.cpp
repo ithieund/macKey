@@ -1,12 +1,12 @@
 /*----------------------------------------------------------
-OpenKey - The Cross platform Open source Vietnamese Keyboard application.
+OhMyKey - The Cross platform Open source Vietnamese Keyboard application.
 
-Copyright (C) 2019 Mai Vu Tuyen
-Contact: maivutuyen.91@gmail.com
-Github: https://github.com/tuyenvm/OpenKey
-Fanpage: https://www.facebook.com/OpenKeyVN
+Copyright (C) 2019 Mai Vu Tuyen (original OpenKey)
+Copyright (C) 2026 Hung Doan (OhMyKey fork)
+Github: https://github.com/hungdoansy/OhMyKey
+Based on OpenKey: https://github.com/tuyenvm/OpenKey
 
-This file is belong to the OpenKey project, Win32 version
+This file is belong to the OhMyKey project, Win32 version
 which is released under GPL license.
 You can fork, modify, improve this program. If you
 redistribute your new version, it MUST be open source.
@@ -71,13 +71,13 @@ LRESULT CALLBACK keyboardHookProcess(int nCode, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK mouseHookProcess(int nCode, WPARAM wParam, LPARAM lParam);
 VOID CALLBACK winEventProcCallback(HWINEVENTHOOK hWinEventHook, DWORD dwEvent, HWND hwnd, LONG idObject, LONG idChild, DWORD dwEventThread, DWORD dwmsEventTime);
 
-void OpenKeyFree() {
+void OhMyKeyFree() {
 	UnhookWindowsHookEx(hMouseHook);
 	UnhookWindowsHookEx(hKeyboardHook);
 	UnhookWinEvent(hSystemEvent);
 }
 
-void OpenKeyInit() {
+void OhMyKeyInit() {
 	APP_GET_DATA(vLanguage, 1);
 	APP_GET_DATA(vInputType, 0);
 	vFreeMark = 0;
@@ -95,7 +95,7 @@ void OpenKeyInit() {
 	APP_GET_DATA(vUseGrayIcon, 0);
 	APP_GET_DATA(vShowOnStartUp, 1);
 	APP_GET_DATA(vRunWithWindows, 1);
-	OpenKeyHelper::registerRunOnStartup(vRunWithWindows);
+	OhMyKeyHelper::registerRunOnStartup(vRunWithWindows);
 	APP_GET_DATA(vUseSmartSwitchKey, 1);
 	APP_GET_DATA(vUpperCaseFirstChar, 0);
 	APP_GET_DATA(vAllowConsonantZFWJ, 0);
@@ -108,7 +108,7 @@ void OpenKeyInit() {
 	APP_GET_DATA(vCheckNewVersion, 0);
 	APP_GET_DATA(vRememberCode, 1);
 	APP_GET_DATA(vOtherLanguage, 1);
-	APP_GET_DATA(vTempOffOpenKey, 0);
+	APP_GET_DATA(vTempOffOhMyKey, 0);
 	APP_GET_DATA(vFixChromiumBrowser, 0);
 
 	//init convert tool
@@ -154,12 +154,12 @@ void OpenKeyInit() {
 
 	//init and load macro data
 	DWORD macroDataSize;
-	BYTE* macroData = OpenKeyHelper::getRegBinary(_T("macroData"), macroDataSize);
+	BYTE* macroData = OhMyKeyHelper::getRegBinary(_T("macroData"), macroDataSize);
 	initMacroMap((Byte*)macroData, (int)macroDataSize);
 
 	//init and load smart switch key data
 	DWORD smartSwitchKeySize;
-	BYTE* data = OpenKeyHelper::getRegBinary(_T("smartSwitchKey"), smartSwitchKeySize);
+	BYTE* data = OhMyKeyHelper::getRegBinary(_T("smartSwitchKey"), smartSwitchKeySize);
 	initSmartSwitchKey((Byte*)data, (int)smartSwitchKeySize);
 
 	//init hook
@@ -171,7 +171,7 @@ void OpenKeyInit() {
 
 void saveSmartSwitchKeyData() {
 	getSmartSwitchKeySaveData(savedSmartSwitchKeyData);
-	OpenKeyHelper::setRegBinary(_T("smartSwitchKey"), savedSmartSwitchKeyData.data(), (int)savedSmartSwitchKeyData.size());
+	OhMyKeyHelper::setRegBinary(_T("smartSwitchKey"), savedSmartSwitchKeyData.data(), (int)savedSmartSwitchKeyData.size());
 }
 
 static void InsertKeyLength(const Uint8& len) {
@@ -268,7 +268,7 @@ static void SendKeyCode(Uint32 data) {
 
 static void SendBackspace() {
 	SendInput(2, backspaceEvent, sizeof(INPUT));
-	if (vSupportMetroApp && OpenKeyHelper::getLastAppExecuteName().compare("ApplicationFrameHost.exe") == 0) {//Metro App
+	if (vSupportMetroApp && OhMyKeyHelper::getLastAppExecuteName().compare("ApplicationFrameHost.exe") == 0) {//Metro App
 		SendMessage(HWND_BROADCAST, WM_CHAR, VK_BACK, 0L);
 		SendMessage(HWND_BROADCAST, WM_CHAR, VK_BACK, 0L);
 	}
@@ -278,7 +278,7 @@ static void SendBackspace() {
 				SendInput(2, backspaceEvent, sizeof(INPUT));
 			}*/
 			SendInput(2, backspaceEvent, sizeof(INPUT));
-			if (vSupportMetroApp && OpenKeyHelper::getLastAppExecuteName().compare("ApplicationFrameHost.exe") == 0) {//Metro App
+			if (vSupportMetroApp && OhMyKeyHelper::getLastAppExecuteName().compare("ApplicationFrameHost.exe") == 0) {//Metro App
 				SendMessage(HWND_BROADCAST, WM_CHAR, VK_BACK, 0L);
 				SendMessage(HWND_BROADCAST, WM_CHAR, VK_BACK, 0L);
 			}
@@ -368,7 +368,7 @@ static void SendNewCharString(const bool& dataFromMacro = false) {
 		startNewSession();
 	}
 
-	OpenKeyHelper::setClipboardText((LPCTSTR)_newCharString.data(), _newCharSize + 1, CF_UNICODETEXT);
+	OhMyKeyHelper::setClipboardText((LPCTSTR)_newCharString.data(), _newCharSize + 1, CF_UNICODETEXT);
 
 	//Send shift + insert
 	SendCombineKey(KEY_LEFT_SHIFT, VK_INSERT, 0, KEYEVENTF_EXTENDEDKEY);
@@ -407,7 +407,7 @@ void switchLanguage() {
 		MessageBeep(MB_OK);
 	AppDelegate::getInstance()->onInputMethodChangedFromHotKey();
 	if (vUseSmartSwitchKey) {
-		setAppInputMethodStatus(OpenKeyHelper::getFrontMostAppExecuteName(), vLanguage | (vCodeTable << 1));
+		setAppInputMethodStatus(OhMyKeyHelper::getFrontMostAppExecuteName(), vLanguage | (vCodeTable << 1));
 		saveSmartSwitchKeyData();
 	}
 	startNewSession();
@@ -551,7 +551,7 @@ LRESULT CALLBACK keyboardHookProcess(int nCode, WPARAM wParam, LPARAM lParam) {
 			if (vTempOffSpelling && !_hasJustUsedHotKey && _lastFlag & MASK_CONTROL) {
 				vTempOffSpellChecking();
 			}
-			if (vTempOffOpenKey && !_hasJustUsedHotKey && _lastFlag & MASK_ALT) {
+			if (vTempOffOhMyKey && !_hasJustUsedHotKey && _lastFlag & MASK_ALT) {
 				vTempOffEngine();
 			}
 			_lastFlag = _flag;
@@ -606,7 +606,7 @@ LRESULT CALLBACK keyboardHookProcess(int nCode, WPARAM wParam, LPARAM lParam) {
 			//fix autocomplete
 			if (vFixRecommendBrowser && pData->extCode != 4) {
 				if (vFixChromiumBrowser && 
-					std::find(_chromiumBrowser.begin(), _chromiumBrowser.end(), OpenKeyHelper::getLastAppExecuteName()) != _chromiumBrowser.end()) {
+					std::find(_chromiumBrowser.begin(), _chromiumBrowser.end(), OhMyKeyHelper::getLastAppExecuteName()) != _chromiumBrowser.end()) {
 					SendCombineKey(KEY_LEFT_SHIFT, KEY_LEFT, 0, KEYEVENTF_EXTENDEDKEY);
 					if (pData->backspaceCount == 1)
 						pData->backspaceCount--;
@@ -674,7 +674,7 @@ LRESULT CALLBACK mouseHookProcess(int nCode, WPARAM wParam, LPARAM lParam) {
 VOID CALLBACK winEventProcCallback(HWINEVENTHOOK hWinEventHook, DWORD dwEvent, HWND hwnd, LONG idObject, LONG idChild, DWORD dwEventThread, DWORD dwmsEventTime) {
 	//smart switch key
 	if (vUseSmartSwitchKey || vRememberCode) {
-		string& exe = OpenKeyHelper::getFrontMostAppExecuteName();
+		string& exe = OhMyKeyHelper::getFrontMostAppExecuteName();
 		if (exe.compare("explorer.exe") == 0) //dont apply with windows explorer
 			return;
 		_languageTemp = getAppInputMethodStatus(exe, vLanguage | (vCodeTable << 1));

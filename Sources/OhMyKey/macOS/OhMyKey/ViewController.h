@@ -1,9 +1,9 @@
 //
 //  ViewController.h
-//  ModernKey
+//  OhMyKey
 //
 //  Created by Tuyen on 1/18/19.
-//  Copyright © 2019 Tuyen Mai. All rights reserved.
+//  Copyright © 2019 Tuyen Mai (OpenKey). Fork: OhMyKey © 2026 Hung Doan. GPL.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -58,7 +58,7 @@
 @property (weak) IBOutlet NSButton *RememberTableCode;
 @property (weak) IBOutlet NSButtonCell *OtherLanguage;
 
-@property (weak) IBOutlet NSButton *TempOffOpenKey;
+@property (weak) IBOutlet NSButton *TempOffOhMyKey;
 @property (weak) IBOutlet NSButton *AutoCapsMacro;
 @property (weak) IBOutlet NSButton *ShowIconOnDock;
 @property (weak) IBOutlet NSButton *CheckNewVersionOnStartup;

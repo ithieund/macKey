@@ -1,12 +1,12 @@
 /*----------------------------------------------------------
-OpenKey - The Cross platform Open source Vietnamese Keyboard application.
+OhMyKey - The Cross platform Open source Vietnamese Keyboard application.
 
-Copyright (C) 2019 Mai Vu Tuyen
-Contact: maivutuyen.91@gmail.com
-Github: https://github.com/tuyenvm/OpenKey
-Fanpage: https://www.facebook.com/OpenKeyVN
+Copyright (C) 2019 Mai Vu Tuyen (original OpenKey)
+Copyright (C) 2026 Hung Doan (OhMyKey fork)
+Github: https://github.com/hungdoansy/OhMyKey
+Based on OpenKey: https://github.com/tuyenvm/OpenKey
 
-This file is belong to the OpenKey project, Win32 version
+This file is belong to the OhMyKey project, Win32 version
 which is released under GPL license.
 You can fork, modify, improve this program. If you
 redistribute your new version, it MUST be open source.
@@ -28,7 +28,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	APP_GET_DATA(vRunAsAdmin, 0);
 	if (vRunAsAdmin && !IsUserAnAdmin()) {
 		//create admin process
-		ShellExecute(0, L"runas", OpenKeyHelper::getFullPath().c_str(), 0, 0, SW_SHOWNORMAL);
+		ShellExecute(0, L"runas", OhMyKeyHelper::getFullPath().c_str(), 0, 0, SW_SHOWNORMAL);
 		return 1;
 	}
 #endif

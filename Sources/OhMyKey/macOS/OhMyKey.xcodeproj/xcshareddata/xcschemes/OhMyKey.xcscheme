@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "232EDA5321F1B33E0085D362"
-               BuildableName = "OpenKey.app"
-               BlueprintName = "OpenKey"
-               ReferencedContainer = "container:OpenKey.xcodeproj">
+               BuildableName = "OhMyKey.app"
+               BlueprintName = "OhMyKey"
+               ReferencedContainer = "container:OhMyKey.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "232EDA5321F1B33E0085D362"
-            BuildableName = "OpenKey.app"
-            BlueprintName = "OpenKey"
-            ReferencedContainer = "container:OpenKey.xcodeproj">
+            BuildableName = "OhMyKey.app"
+            BlueprintName = "OhMyKey"
+            ReferencedContainer = "container:OhMyKey.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "232EDA5321F1B33E0085D362"
-            BuildableName = "OpenKey.app"
-            BlueprintName = "OpenKey"
-            ReferencedContainer = "container:OpenKey.xcodeproj">
+            BuildableName = "OhMyKey.app"
+            BlueprintName = "OhMyKey"
+            ReferencedContainer = "container:OhMyKey.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <EnvironmentVariables>
@@ -81,9 +81,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "232EDA5321F1B33E0085D362"
-            BuildableName = "OpenKey.app"
-            BlueprintName = "OpenKey"
-            ReferencedContainer = "container:OpenKey.xcodeproj">
+            BuildableName = "OhMyKey.app"
+            BlueprintName = "OhMyKey"
+            ReferencedContainer = "container:OhMyKey.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

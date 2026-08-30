@@ -1,27 +1,27 @@
 //
-//  OpenKeyManager.m
-//  OpenKey
+//  OhMyKeyManager.m
+//  OhMyKey
 //
 //  Created by Tuyen on 1/27/19.
-//  Copyright © 2019 Tuyen Mai. All rights reserved.
+//  Copyright © 2019 Tuyen Mai (OpenKey). Fork: OhMyKey © 2026 Hung Doan. GPL.
 //
 
-#import "OpenKeyManager.h"
+#import "OhMyKeyManager.h"
 
-extern void OpenKeyInit(void);
+extern void OhMyKeyInit(void);
 
-extern CGEventRef OpenKeyCallback(CGEventTapProxy proxy,
+extern CGEventRef OhMyKeyCallback(CGEventTapProxy proxy,
                                   CGEventType type,
                                   CGEventRef event,
                                   void *refcon);
 
 extern NSString* ConvertUtil(NSString* str);
 
-@interface OpenKeyManager ()
+@interface OhMyKeyManager ()
 
 @end
 
-@implementation OpenKeyManager {
+@implementation OhMyKeyManager {
 
 }
 static BOOL _isInited = NO;
@@ -39,7 +39,7 @@ static CFRunLoopSourceRef runLoopSource;
         return true;
     
     //init modernKey
-    OpenKeyInit();
+    OhMyKeyInit();
     
     // Create an event tap. We are interested in key presses.
     eventMask = ((1 << kCGEventKeyDown) |
@@ -54,7 +54,7 @@ static CFRunLoopSourceRef runLoopSource;
                                 kCGHeadInsertEventTap,
                                 0,
                                 eventMask,
-                                OpenKeyCallback,
+                                OhMyKeyCallback,
                                 NULL);
     
     if (!eventTap) {
@@ -149,7 +149,7 @@ static CFRunLoopSourceRef runLoopSource;
 +(void)checkNewVersion:(NSWindow*)parent callbackFunc:(CheckNewVersionCallback) callback {
     //load new version config
     NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    [[aSession dataTaskWithURL:[NSURL URLWithString:@"https://raw.githubusercontent.com/tuyenvm/OpenKey/master/version.json"] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+    [[aSession dataTaskWithURL:[NSURL URLWithString:@"https://raw.githubusercontent.com/hungdoansy/OhMyKey/master/version.json"] completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (((NSHTTPURLResponse *)response).statusCode == 200) {
             if (data) {
                 if(NSClassFromString(@"NSJSONSerialization")) {
@@ -190,8 +190,8 @@ static CFRunLoopSourceRef runLoopSource;
 
 +(void)showUpdateMessage:(NSWindow*)parent needUpdating:(BOOL)needUpdating newVersion:(NSString*)versionString {
     NSAlert *alert = [[NSAlert alloc] init];
-    [alert setMessageText:(needUpdating ? [NSString stringWithFormat:@"OpenKey Có phiên bản mới (%@), bạn có muốn cập nhật không?", versionString] : @"Bạn đang dùng phiên bản mới nhất!")];
-    [alert setInformativeText:(needUpdating ? @"Bấm 'Có' để cập nhật OpenKey." : @"")];
+    [alert setMessageText:(needUpdating ? [NSString stringWithFormat:@"OhMyKey Có phiên bản mới (%@), bạn có muốn cập nhật không?", versionString] : @"Bạn đang dùng phiên bản mới nhất!")];
+    [alert setInformativeText:(needUpdating ? @"Bấm 'Có' để cập nhật OhMyKey." : @"")];
     
     if (!needUpdating) {
         [alert addButtonWithTitle:@"OK"];
@@ -218,7 +218,7 @@ static CFRunLoopSourceRef runLoopSource;
 +(void)launchUpdateHelper {
     //check update app has exist or not
     NSError *copyError = nil;
-    NSString* target = [NSString stringWithFormat:@"%@/OpenKeyUpdate.app", [self getApplicationSupportFolder]];
+    NSString* target = [NSString stringWithFormat:@"%@/OhMyKeyUpdate.app", [self getApplicationSupportFolder]];
     [[NSFileManager defaultManager] removeItemAtPath:target error:&copyError];
     if (![[NSFileManager defaultManager] fileExistsAtPath:target]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:[self getApplicationSupportFolder] withIntermediateDirectories:YES attributes:nil error:nil];
@@ -240,11 +240,11 @@ static CFRunLoopSourceRef runLoopSource;
 +(NSString*)getApplicationSupportFolder {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
     NSString *applicationSupportDirectory = [paths firstObject];
-    return [NSString stringWithFormat:@"%@/OpenKey", applicationSupportDirectory];
+    return [NSString stringWithFormat:@"%@/OhMyKey", applicationSupportDirectory];
 }
 
 +(NSString*)getUpdateBundlePath {
     NSString *currentpath = [[NSBundle mainBundle] bundlePath];
-    return [NSString stringWithFormat:@"%@/Contents/Library/LoginItems/OpenKeyUpdate.app", currentpath];
+    return [NSString stringWithFormat:@"%@/Contents/Library/LoginItems/OhMyKeyUpdate.app", currentpath];
 }
 @end

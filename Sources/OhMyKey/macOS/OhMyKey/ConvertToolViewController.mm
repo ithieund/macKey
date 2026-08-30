@@ -1,14 +1,14 @@
 //
 //  ConvertToolViewController.mm
-//  OpenKey
+//  OhMyKey
 //
 //  Created by Tuyen on 9/4/19.
-//  Copyright © 2019 Tuyen Mai. All rights reserved.
+//  Copyright © 2019 Tuyen Mai (OpenKey). Fork: OhMyKey © 2026 Hung Doan. GPL.
 //
 
 #import "AppDelegate.h"
 #import "ConvertToolViewController.h"
-#import "OpenKeyManager.h"
+#import "OhMyKeyManager.h"
 #import "ConvertTool.h"
 
 extern AppDelegate* appDelegate;
@@ -27,7 +27,7 @@ extern AppDelegate* appDelegate;
 }
 
 -(void)fillData {
-    NSArray* codeData = [OpenKeyManager getTableCodes];
+    NSArray* codeData = [OhMyKeyManager getTableCodes];
     [self.FromCode removeAllItems];
     [self.FromCode addItemsWithTitles:codeData];
     [self.ToCode removeAllItems];
@@ -173,12 +173,12 @@ extern AppDelegate* appDelegate;
 }
 
 - (IBAction)onConvertButton:(id)sender {
-    if ([OpenKeyManager quickConvert]) {
+    if ([OhMyKeyManager quickConvert]) {
         if (!convertToolDontAlertWhenCompleted) {
-            [OpenKeyManager showMessage: self.view.window message:@"Chuyển mã thành công!" subMsg:@"Kết quả đã được lưu trong clipboard."];
+            [OhMyKeyManager showMessage: self.view.window message:@"Chuyển mã thành công!" subMsg:@"Kết quả đã được lưu trong clipboard."];
         }
     } else {
-        [OpenKeyManager showMessage: self.view.window message:@"Không có dữ liệu trong clipboard!" subMsg:@"Hãy sao chép một đoạn text để chuyển đổi!"];
+        [OhMyKeyManager showMessage: self.view.window message:@"Không có dữ liệu trong clipboard!" subMsg:@"Hãy sao chép một đoạn text để chuyển đổi!"];
     }
 }
 

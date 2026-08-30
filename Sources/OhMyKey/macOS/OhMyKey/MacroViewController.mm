@@ -1,9 +1,9 @@
 //
 //  MacroViewController.mm
-//  OpenKey
+//  OhMyKey
 //
 //  Created by Tuyen on 8/4/19.
-//  Copyright © 2019 Tuyen Mai. All rights reserved.
+//  Copyright © 2019 Tuyen Mai (OpenKey). Fork: OhMyKey © 2026 Hung Doan. GPL.
 //
 
 #import "MacroViewController.h"
@@ -86,7 +86,7 @@
     [openPanel setCanChooseDirectories:NO];
     [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"txt", nil]];
     [openPanel setExtensionHidden:NO];
-    [openPanel setNameFieldStringValue:@"OpenKeyMacro"];
+    [openPanel setNameFieldStringValue:@"OhMyKeyMacro"];
     [openPanel makeKeyAndOrderFront:nil];
     [openPanel setLevel:NSStatusWindowLevel];
     if ([openPanel runModal] == NSModalResponseOK ) {
@@ -110,7 +110,7 @@
     [savePanel setTitle:@"Chọn nơi lưu dữ liệu gõ tắt"];
     [savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"txt", nil]];
     [savePanel setExtensionHidden:NO];
-    [savePanel setNameFieldStringValue:@"OpenKeyMacro"];
+    [savePanel setNameFieldStringValue:@"OhMyKeyMacro"];
     if ([savePanel runModal] == NSModalResponseOK) {
         saveToFile(savePanel.URL.path.UTF8String);
     }

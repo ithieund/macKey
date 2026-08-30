@@ -1,9 +1,9 @@
 //
-//  OpenKey.m
-//  OpenKey
+//  OhMyKey.m
+//  OhMyKey
 //
 //  Created by Tuyen on 1/18/19.
-//  Copyright © 2019 Tuyen Mai. All rights reserved.
+//  Copyright © 2019 Tuyen Mai (OpenKey). Fork: OhMyKey © 2026 Hung Doan. GPL.
 //
 #import <Cocoa/Cocoa.h>
 #import <Carbon/Carbon.h>
@@ -86,7 +86,7 @@ extern "C" {
     
     NSString* _frontMostApp = @"UnknownApp";
     
-    void OpenKeyInit() {
+    void OhMyKeyInit() {
         //load saved data
         vFreeMark = 0;//(int)[[NSUserDefaults standardUserDefaults] integerForKey:@"FreeMark"];
         LOAD_DATA(vCodeTable, CodeTable); if (vCodeTable < 0) vCodeTable = 0;
@@ -108,7 +108,7 @@ extern "C" {
         LOAD_DATA(vQuickStartConsonant, vQuickStartConsonant);
         LOAD_DATA(vRememberCode, vRememberCode);
         LOAD_DATA(vOtherLanguage, vOtherLanguage);
-        LOAD_DATA(vTempOffOpenKey, vTempOffOpenKey);
+        LOAD_DATA(vTempOffOhMyKey, vTempOffOhMyKey);
         
         LOAD_DATA(vFixChromiumBrowser, vFixChromiumBrowser);
         
@@ -154,7 +154,7 @@ extern "C" {
     }
     
     void queryFrontMostApp() {
-        if ([[[NSWorkspace sharedWorkspace] frontmostApplication].bundleIdentifier compare:OPENKEY_BUNDLE] != 0) {
+        if ([[[NSWorkspace sharedWorkspace] frontmostApplication].bundleIdentifier compare:OHMYKEY_BUNDLE] != 0) {
             _frontMostApp = [[NSWorkspace sharedWorkspace] frontmostApplication].bundleIdentifier;
             if (_frontMostApp == nil)
                 _frontMostApp = [[NSWorkspace sharedWorkspace] frontmostApplication].localizedName != nil ?
@@ -598,7 +598,7 @@ extern "C" {
      * MAIN HOOK entry, very important function.
      * MAIN Callback.
      */
-    CGEventRef OpenKeyCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon) {
+    CGEventRef OhMyKeyCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon) {
         //dont handle my event
         if (CGEventGetIntegerValueField(event, kCGEventSourceStateID) == CGEventSourceGetSourceStateID(myEventSource)) {
             return event;
@@ -652,7 +652,7 @@ extern "C" {
                 if (vTempOffSpelling && !_hasJustUsedHotKey && _lastFlag & kCGEventFlagMaskControl) {
                     vTempOffSpellChecking();
                 }
-                if (vTempOffOpenKey && !_hasJustUsedHotKey && _lastFlag & kCGEventFlagMaskCommand) {
+                if (vTempOffOhMyKey && !_hasJustUsedHotKey && _lastFlag & kCGEventFlagMaskCommand) {
                     vTempOffEngine();
                 }
                 _lastFlag = 0;

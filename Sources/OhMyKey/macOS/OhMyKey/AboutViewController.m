@@ -1,13 +1,13 @@
 //
 //  AboutViewController.m
-//  OpenKey
+//  OhMyKey
 //
 //  Created by Tuyen on 2/15/19.
-//  Copyright © 2019 Tuyen Mai. All rights reserved.
+//  Copyright © 2019 Tuyen Mai (OpenKey). Fork: OhMyKey © 2026 Hung Doan. GPL.
 //
 
 #import "AboutViewController.h"
-#import "OpenKeyManager.h"
+#import "OhMyKeyManager.h"
 
 @interface AboutViewController ()
 
@@ -22,22 +22,22 @@
     self.VersionInfo.stringValue = [NSString stringWithFormat:@"Phiên bản %@ (build %@) - Ngày cập nhật %@",
                                     [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"],
                                     [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleVersion"],
-                                    [OpenKeyManager getBuildDate]] ;
+                                    [OhMyKeyManager getBuildDate]] ;
     
     NSInteger dontCheckUpdate = [[NSUserDefaults standardUserDefaults] integerForKey:@"DontCheckUpdate"];
     self.CheckUpdateOnStatus.state = dontCheckUpdate ? NSControlStateValueOff :NSControlStateValueOn;
 }
 
 - (IBAction)onHomePage:(id)sender {
-    [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"https://github.com/tuyenvm/OpenKey"]];
+    [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"https://github.com/hungdoansy/OhMyKey"]];
 }
 
 - (IBAction)onFanPage:(id)sender {
-    [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"https://www.facebook.com/OpenKeyVN"]];
+    [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"https://github.com/hungdoansy/OhMyKey/issues"]];
 }
 
 - (IBAction)onLatestReleaseVersion:(id)sender {
-    [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"https://github.com/tuyenvm/OpenKey/releases"]];
+    [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"https://github.com/hungdoansy/OhMyKey/releases"]];
 }
 
 - (IBAction)onCheckUpdateOnStartup:(NSButton *)sender {
@@ -50,7 +50,7 @@
     self.CheckNewVersionButton.title = @"Đang kiểm tra...";
     self.CheckNewVersionButton.enabled = false;
     
-    [OpenKeyManager checkNewVersion: self.view.window callbackFunc:^{
+    [OhMyKeyManager checkNewVersion: self.view.window callbackFunc:^{
         self.CheckNewVersionButton.enabled = true;
         self.CheckNewVersionButton.title = @"Kiểm tra bản mới...";
     }];

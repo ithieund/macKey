@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{21E71F9D-859A-4B8B-84F4-F5003E933BB3}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>OpenKey</RootNamespace>
+    <RootNamespace>OhMyKey</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -169,8 +169,8 @@
     <ClInclude Include="ConvertToolDialog.h" />
     <ClInclude Include="MacroDialog.h" />
     <ClInclude Include="MainControlDialog.h" />
-    <ClInclude Include="OpenKeyHelper.h" />
-    <ClInclude Include="OpenKeyManager.h" />
+    <ClInclude Include="OhMyKeyHelper.h" />
+    <ClInclude Include="OhMyKeyManager.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SystemTrayHelper.h" />
@@ -189,9 +189,9 @@
     <ClCompile Include="MacroDialog.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainControlDialog.cpp" />
-    <ClCompile Include="OpenKey.cpp" />
-    <ClCompile Include="OpenKeyHelper.cpp" />
-    <ClCompile Include="OpenKeyManager.cpp" />
+    <ClCompile Include="OhMyKey.cpp" />
+    <ClCompile Include="OhMyKeyHelper.cpp" />
+    <ClCompile Include="OhMyKeyManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -201,7 +201,7 @@
     <ClCompile Include="SystemTrayHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="OpenKey.rc" />
+    <ResourceCompile Include="OhMyKey.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="DefaultButton.ico" />

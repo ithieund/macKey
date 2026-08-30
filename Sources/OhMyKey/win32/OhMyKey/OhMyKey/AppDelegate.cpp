@@ -1,12 +1,12 @@
 ﻿/*----------------------------------------------------------
-OpenKey - The Cross platform Open source Vietnamese Keyboard application.
+OhMyKey - The Cross platform Open source Vietnamese Keyboard application.
 
-Copyright (C) 2019 Mai Vu Tuyen
-Contact: maivutuyen.91@gmail.com
-Github: https://github.com/tuyenvm/OpenKey
-Fanpage: https://www.facebook.com/OpenKeyVN
+Copyright (C) 2019 Mai Vu Tuyen (original OpenKey)
+Copyright (C) 2026 Hung Doan (OhMyKey fork)
+Github: https://github.com/hungdoansy/OhMyKey
+Based on OpenKey: https://github.com/tuyenvm/OpenKey
 
-This file is belong to the OpenKey project, Win32 version
+This file is belong to the OhMyKey project, Win32 version
 which is released under GPL license.
 You can fork, modify, improve this program. If you
 redistribute your new version, it MUST be open source.
@@ -39,7 +39,7 @@ int vQuickStartConsonant = 0;
 int vQuickEndConsonant = 0;
 int vOtherLanguage = 1;
 int vRememberCode = 1;
-int vTempOffOpenKey = 0;
+int vTempOffOhMyKey = 0;
 
 int vUseGrayIcon = 0;
 int vShowOnStartUp = 0;
@@ -61,25 +61,25 @@ bool AppDelegate::isDialogMsg(MSG & msg) const {
 
 void AppDelegate::checkUpdate() {
 	string newVersion;
-	if (OpenKeyManager::checkUpdate(newVersion)) {
+	if (OhMyKeyManager::checkUpdate(newVersion)) {
 		WCHAR msg[256];
 		wsprintf(msg,
-			TEXT("OpenKey Có phiên bản mới (%s), bạn có muốn cập nhật không?"),
+			TEXT("OhMyKey Có phiên bản mới (%s), bạn có muốn cập nhật không?"),
 			utf8ToWideString(newVersion).c_str());
 
 		int msgboxID = MessageBox(
 			0,
 			msg,
-			_T("OpenKey Update"),
+			_T("OhMyKey Update"),
 			MB_ICONEXCLAMATION | MB_YESNO
 		);
 		if (msgboxID == IDYES) {
-			//Call OpenKeyUpdate
+			//Call OhMyKeyUpdate
 			WCHAR path[MAX_PATH];
 			GetCurrentDirectory(MAX_PATH, path);
-			wsprintf(path, TEXT("%s\\OpenKeyUpdate.exe"), path);
+			wsprintf(path, TEXT("%s\\OhMyKeyUpdate.exe"), path);
 			ShellExecute(0, L"", path, 0, 0, SW_SHOWNORMAL);
-			AppDelegate::getInstance()->onOpenKeyExit();
+			AppDelegate::getInstance()->onOhMyKeyExit();
 		}
 
 	}
@@ -105,8 +105,8 @@ int AppDelegate::run(HINSTANCE hInstance) {
 		return 0;
 	}
 
-	//init OpenKey Engine
-	OpenKeyManager::initEngine();
+	//init OhMyKey Engine
+	OhMyKeyManager::initEngine();
 
 	//create system tray
 	SystemTrayHelper::createSystemTrayIcon(hInstance);
@@ -125,7 +125,7 @@ int AppDelegate::run(HINSTANCE hInstance) {
 	// Main message loop:
 	while (GetMessage(&msg, nullptr, 0, 0))	{
 		if (msg.message == WM_KEYDOWN) {
-			OpenKeyManager::_lastKeyCode = (UINT16)msg.wParam;
+			OhMyKeyManager::_lastKeyCode = (UINT16)msg.wParam;
 		}
 		if (!isDialogMsg(msg)) {
 			TranslateMessage(&msg);
@@ -195,7 +195,7 @@ void AppDelegate::onDefaultConfig() {
 	APP_SET_DATA(vSupportMetroApp, 1);
 	APP_SET_DATA(vRememberCode, 1);
 	APP_SET_DATA(vOtherLanguage, 1);
-	APP_SET_DATA(vTempOffOpenKey, 0);
+	APP_SET_DATA(vTempOffOhMyKey, 0);
 	APP_SET_DATA(vFixChromiumBrowser, 0);
 
 	if (mainDialog) {
@@ -211,7 +211,7 @@ void AppDelegate::onToggleVietnamese() {
 	}
 	
 	if (vUseSmartSwitchKey) {
-		string& exe = OpenKeyHelper::getLastAppExecuteName();
+		string& exe = OhMyKeyHelper::getLastAppExecuteName();
 		setAppInputMethodStatus(exe, vLanguage | (vCodeTable << 1));
 		saveSmartSwitchKeyData();
 	}
@@ -258,12 +258,12 @@ void AppDelegate::onConvertTool() {
 }
 
 void AppDelegate::onQuickConvert() {
-	if (OpenKeyHelper::quickConvert()) {
+	if (OhMyKeyHelper::quickConvert()) {
 		//alert when complete
 		if (!convertToolDontAlertWhenCompleted) {
 			TCHAR msg[256];
 			LoadString(hInstance, IDS_STRING_CONVERT_COMPLETED, msg, 256);
-			MessageBox(NULL, msg, _T("OpenKey"), MB_OK);
+			MessageBox(NULL, msg, _T("OhMyKey"), MB_OK);
 		}
 	}
 }
@@ -281,7 +281,7 @@ void AppDelegate::onTableCode(const int & code) {
 		mainDialog->fillData();
 	}
 	if (vRememberCode) {
-		setAppInputMethodStatus(OpenKeyHelper::getFrontMostAppExecuteName(), vLanguage | (vCodeTable << 1));
+		setAppInputMethodStatus(OhMyKeyHelper::getFrontMostAppExecuteName(), vLanguage | (vCodeTable << 1));
 		saveSmartSwitchKeyData();
 	}
 }
@@ -290,7 +290,7 @@ void AppDelegate::onControlPanel() {
 	createMainDialog();
 }
 
-void AppDelegate::onOpenKeyAbout() {
+void AppDelegate::onOhMyKeyAbout() {
 	if (aboutDialog == NULL) {
 		aboutDialog = new AboutDialog(hInstance, IDD_ABOUTBOX);
 		aboutDialog->show();
@@ -299,8 +299,8 @@ void AppDelegate::onOpenKeyAbout() {
 	}
 }
 
-void AppDelegate::onOpenKeyExit() {
-	OpenKeyManager::freeEngine();
+void AppDelegate::onOhMyKeyExit() {
+	OhMyKeyManager::freeEngine();
 	SystemTrayHelper::removeSystemTray();
 	PostQuitMessage(0);
 }

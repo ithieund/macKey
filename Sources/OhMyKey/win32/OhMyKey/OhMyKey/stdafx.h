@@ -1,12 +1,12 @@
 /*----------------------------------------------------------
-OpenKey - The Cross platform Open source Vietnamese Keyboard application.
+OhMyKey - The Cross platform Open source Vietnamese Keyboard application.
 
-Copyright (C) 2019 Mai Vu Tuyen
-Contact: maivutuyen.91@gmail.com
-Github: https://github.com/tuyenvm/OpenKey
-Fanpage: https://www.facebook.com/OpenKeyVN
+Copyright (C) 2019 Mai Vu Tuyen (original OpenKey)
+Copyright (C) 2026 Hung Doan (OhMyKey fork)
+Github: https://github.com/hungdoansy/OhMyKey
+Based on OpenKey: https://github.com/tuyenvm/OpenKey
 
-This file is belong to the OpenKey project, Win32 version
+This file is belong to the OhMyKey project, Win32 version
 which is released under GPL license.
 You can fork, modify, improve this program. If you
 redistribute your new version, it MUST be open source.
@@ -42,8 +42,8 @@ redistribute your new version, it MUST be open source.
 
 #include "../../../engine/Engine.h"
 
-#include "OpenKeyManager.h"
-#include "OpenKeyHelper.h"
+#include "OhMyKeyManager.h"
+#include "OhMyKeyHelper.h"
 #include "SystemTrayHelper.h"
 
 using namespace std;
@@ -52,10 +52,10 @@ extern wchar_t _logBuffer[1024];
 #define LOG(...)  wsprintfW(_logBuffer, __VA_ARGS__); \
 					OutputDebugString(_logBuffer);
 
-#define APP_SET_DATA(KEY, VAL) KEY = VAL; OpenKeyHelper::setRegInt(_T(#KEY), KEY)
-#define APP_GET_DATA(KEY, DEFAULT_VAL) KEY = OpenKeyHelper::getRegInt(_T(#KEY), DEFAULT_VAL)
+#define APP_SET_DATA(KEY, VAL) KEY = VAL; OhMyKeyHelper::setRegInt(_T(#KEY), KEY)
+#define APP_GET_DATA(KEY, DEFAULT_VAL) KEY = OhMyKeyHelper::getRegInt(_T(#KEY), DEFAULT_VAL)
 
-#define APP_CLASS _T("OpenKeyVietnameseInputMethod")
+#define APP_CLASS _T("OhMyKeyVietnameseInputMethod")
 
 extern void saveSmartSwitchKeyData();
 
@@ -84,5 +84,5 @@ extern int vRunAsAdmin;
 extern int vCheckNewVersion;
 extern int vRememberCode;
 extern int vOtherLanguage;
-extern int vTempOffOpenKey;
+extern int vTempOffOhMyKey;
 extern int vFixChromiumBrowser;

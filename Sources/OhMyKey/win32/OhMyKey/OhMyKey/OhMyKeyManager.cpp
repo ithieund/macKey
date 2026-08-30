@@ -1,17 +1,17 @@
 ﻿/*----------------------------------------------------------
-OpenKey - The Cross platform Open source Vietnamese Keyboard application.
+OhMyKey - The Cross platform Open source Vietnamese Keyboard application.
 
-Copyright (C) 2019 Mai Vu Tuyen
-Contact: maivutuyen.91@gmail.com
-Github: https://github.com/tuyenvm/OpenKey
-Fanpage: https://www.facebook.com/OpenKeyVN
+Copyright (C) 2019 Mai Vu Tuyen (original OpenKey)
+Copyright (C) 2026 Hung Doan (OhMyKey fork)
+Github: https://github.com/hungdoansy/OhMyKey
+Based on OpenKey: https://github.com/tuyenvm/OpenKey
 
-This file is belong to the OpenKey project, Win32 version
+This file is belong to the OhMyKey project, Win32 version
 which is released under GPL license.
 You can fork, modify, improve this program. If you
 redistribute your new version, it MUST be open source.
 -----------------------------------------------------------*/
-#include "OpenKeyManager.h"
+#include "OhMyKeyManager.h"
 #include <shlobj.h>
 
 static vector<LPCTSTR> _inputType = {
@@ -30,29 +30,29 @@ static vector<LPCTSTR> _tableCode = {
 
 /*-----------------------------------------------------------------------*/
 
-extern void OpenKeyInit();
-extern void OpenKeyFree();
+extern void OhMyKeyInit();
+extern void OhMyKeyFree();
 
-unsigned short  OpenKeyManager::_lastKeyCode = 0;
+unsigned short  OhMyKeyManager::_lastKeyCode = 0;
 
-vector<LPCTSTR>& OpenKeyManager::getInputType() {
+vector<LPCTSTR>& OhMyKeyManager::getInputType() {
 	return _inputType;
 }
 
-vector<LPCTSTR>& OpenKeyManager::getTableCode() {
+vector<LPCTSTR>& OhMyKeyManager::getTableCode() {
 	return _tableCode;
 }
 
-void OpenKeyManager::initEngine() {
-	OpenKeyInit();
+void OhMyKeyManager::initEngine() {
+	OhMyKeyInit();
 }
 
-void OpenKeyManager::freeEngine() {
-	OpenKeyFree();
+void OhMyKeyManager::freeEngine() {
+	OhMyKeyFree();
 }
 
-bool OpenKeyManager::checkUpdate(string& newVersion) {
-	wstring dataW = OpenKeyHelper::getContentOfUrl(L"https://raw.githubusercontent.com/tuyenvm/OpenKey/master/version.json");
+bool OhMyKeyManager::checkUpdate(string& newVersion) {
+	wstring dataW = OhMyKeyHelper::getContentOfUrl(L"https://raw.githubusercontent.com/hungdoansy/OhMyKey/master/version.json");
 	string data = wideStringToUtf8(dataW);
 
 	//simple parse
@@ -94,22 +94,22 @@ bool OpenKeyManager::checkUpdate(string& newVersion) {
 	DWORD newVersionCode = (DWORD)atoi(newVersionCodeStr.data());
 	newVersionCode = shiftVersion(newVersionCode);
 
-	DWORD currentVersionCode = OpenKeyHelper::getVersionNumber();
+	DWORD currentVersionCode = OhMyKeyHelper::getVersionNumber();
 	currentVersionCode = shiftVersion(currentVersionCode);
 
 	return newVersionCode > currentVersionCode;
 }
 
-void OpenKeyManager::createDesktopShortcut() {
+void OhMyKeyManager::createDesktopShortcut() {
 	CoInitialize(NULL);
 	IShellLink* pShellLink = NULL;
 	HRESULT hres;
 	hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_ALL,
 							IID_IShellLink, (void**)&pShellLink);
 	if (SUCCEEDED(hres)) {
-		wstring path = OpenKeyHelper::getFullPath();
+		wstring path = OhMyKeyHelper::getFullPath();
 		pShellLink->SetPath(path.c_str());
-		pShellLink->SetDescription(_T("OpenKey - Bộ gõ Tiếng Việt"));
+		pShellLink->SetDescription(_T("OhMyKey - Bộ gõ Tiếng Việt"));
 		pShellLink->SetIconLocation(path.c_str(), 0);
 
 		IPersistFile* pPersistFile;
@@ -119,7 +119,7 @@ void OpenKeyManager::createDesktopShortcut() {
 			wchar_t desktopPath[MAX_PATH + 1];
 			wchar_t savePath[MAX_PATH + 10];
 			SHGetFolderPath(NULL, CSIDL_DESKTOP, NULL, 0, desktopPath);
-			wsprintf(savePath, _T("%s\\OpenKey.lnk"), desktopPath);
+			wsprintf(savePath, _T("%s\\OhMyKey.lnk"), desktopPath);
 			hres = pPersistFile->Save(savePath, TRUE);
 			pPersistFile->Release();
 			pShellLink->Release();

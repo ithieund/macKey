@@ -1,6 +1,6 @@
 //
 //  Engine.h
-//  OpenKey
+//  OhMyKey
 //
 //  Created by Tuyen on 1/18/19.
 //  Copyright © 2019 Tuyen Mai. All rights reserved.
@@ -183,9 +183,9 @@ extern int vOtherLanguage;
 
 /**
  * 0: No; 1: Yes
- * Temporarily turn off OpenKey  by hot key (Command on mac, Alt on Windows and Linux)
+ * Temporarily turn off OhMyKey  by hot key (Command on mac, Alt on Windows and Linux)
  */
-extern int vTempOffOpenKey;
+extern int vTempOffOhMyKey;
 
 /**
  * Call this function first to receive data pointer
@@ -232,7 +232,7 @@ void vTempOffSpellChecking();
 void vSetCheckSpelling();
 
 /**
- * temporarily turn off OpenKey engine
+ * temporarily turn off OhMyKey engine
  */
 void vTempOffEngine(const bool& off=true);
 

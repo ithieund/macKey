@@ -1,13 +1,13 @@
 //
 //  ViewController.m
-//  ModernKey
+//  OhMyKey
 //
 //  Created by Tuyen on 1/18/19.
-//  Copyright © 2019 Tuyen Mai. All rights reserved.
+//  Copyright © 2019 Tuyen Mai (OpenKey). Fork: OhMyKey © 2026 Hung Doan. GPL.
 //
 
 #import "ViewController.h"
-#import "OpenKeyManager.h"
+#import "OhMyKeyManager.h"
 #import "AppDelegate.h"
 #import "MyTextField.h"
 
@@ -33,7 +33,7 @@ extern int vQuickStartConsonant;
 extern int vQuickEndConsonant;
 extern int vRememberCode;
 extern int vOtherLanguage;
-extern int vTempOffOpenKey;
+extern int vTempOffOhMyKey;
 extern int vShowIconOnDock;
 extern int vAutoCapsMacro;
 extern int vFixChromiumBrowser;
@@ -85,7 +85,7 @@ extern int vPerformLayoutCompat;
     [self showTab:0];
     
     NSArray* inputTypeData = [[NSArray alloc] initWithObjects:@"Telex", @"VNI", @"Simple Telex 1", @"Simple Telex 2", nil];
-    NSArray* codeData = [OpenKeyManager getTableCodes];
+    NSArray* codeData = [OhMyKeyManager getTableCodes];
     
     //preset data
     [_popupInputType removeAllItems];
@@ -102,12 +102,12 @@ extern int vPerformLayoutCompat;
     self.VersionInfo.stringValue = [NSString stringWithFormat:@"Phiên bản %@ (build %@) - Ngày cập nhật %@",
     [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"],
     [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleVersion"],
-    [OpenKeyManager getBuildDate]] ;
+    [OhMyKeyManager getBuildDate]] ;
 }
 
 - (void)viewDidAppear {
     [super viewDidAppear];
-    NSString* str = @"OpenKey %@ - Bộ gõ Tiếng Việt";
+    NSString* str = @"OhMyKey %@ - Bộ gõ Tiếng Việt";
     self.view.window.title = [NSString stringWithFormat:str, [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]];
 }
 
@@ -117,7 +117,7 @@ extern int vPerformLayoutCompat;
 
 -(void)initKey {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (![OpenKeyManager initEventTap]) {
+        if (![OhMyKeyManager initEventTap]) {
             //self.permissionWarning.hidden = NO;
             //self.retryButton.enabled = YES;
         } else {
@@ -336,9 +336,9 @@ extern int vPerformLayoutCompat;
     vQuickEndConsonant = (int)val;
 }
 
-- (IBAction)onTempOffOpenKeyByHotKey:(id)sender {
-    NSInteger val = [self setCustomValue:sender keyToSet:@"vTempOffOpenKey"];
-    vTempOffOpenKey = (int)val;
+- (IBAction)onTempOffOhMyKeyByHotKey:(id)sender {
+    NSInteger val = [self setCustomValue:sender keyToSet:@"vTempOffOhMyKey"];
+    vTempOffOhMyKey = (int)val;
 }
 
 - (IBAction)onRememberTableCode:(id)sender {
@@ -460,8 +460,8 @@ extern int vPerformLayoutCompat;
     value = [[NSUserDefaults standardUserDefaults] integerForKey:@"vOtherLanguage"];
     self.OtherLanguage.state = value ? NSControlStateValueOn : NSControlStateValueOff;
     
-    value = [[NSUserDefaults standardUserDefaults] integerForKey:@"vTempOffOpenKey"];
-    self.TempOffOpenKey.state = value ? NSControlStateValueOn : NSControlStateValueOff;
+    value = [[NSUserDefaults standardUserDefaults] integerForKey:@"vTempOffOhMyKey"];
+    self.TempOffOhMyKey.state = value ? NSControlStateValueOn : NSControlStateValueOff;
     
     value = [[NSUserDefaults standardUserDefaults] integerForKey:@"vAutoCapsMacro"];
     self.AutoCapsMacro.state = value ? NSControlStateValueOn : NSControlStateValueOff;
@@ -510,26 +510,26 @@ extern int vPerformLayoutCompat;
 }
 
 - (IBAction)onHomePageLink:(id)sender {
-    [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"https://open-key.org"]];
+    [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"https://github.com/hungdoansy/OhMyKey"]];
 }
 
 - (IBAction)onFanpageLink:(id)sender {
-    [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"https://www.facebook.com/OpenKeyVN"]];
+    [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"https://github.com/hungdoansy/OhMyKey/issues"]];
 }
 
 - (IBAction)onEmailLink:(id)sender {
-    [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"mailto:maivutuyen.91@gmail.com"]];
+    [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"https://github.com/hungdoansy"]];
 }
 
 - (IBAction)onSourceCode:(id)sender {
-  [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"https://github.com/tuyenvm/OpenKey"]];
+  [[NSWorkspace sharedWorkspace] openURL: [NSURL URLWithString:@"https://github.com/hungdoansy/OhMyKey"]];
 }
 
 - (IBAction)onCheckNewVersionButton:(id)sender {
     self.CheckNewVersionButton.title = @"Đang kiểm tra...";
     self.CheckNewVersionButton.enabled = false;
     
-    [OpenKeyManager checkNewVersion:self.view.window callbackFunc:^{
+    [OhMyKeyManager checkNewVersion:self.view.window callbackFunc:^{
         self.CheckNewVersionButton.enabled = true;
         self.CheckNewVersionButton.title = @"Kiểm tra bản mới...";
     }];

@@ -5,8 +5,8 @@
 //
 
 
-#ifndef OPENKEY_LINUX_H
-#define OPENKEY_LINUX_H
+#ifndef OHMYKEY_LINUX_H
+#define OHMYKEY_LINUX_H
 
 //define Key code for Linux keyboard
 #define KEY_ESC                                 9
@@ -75,4 +75,4 @@
 #define KEY_COMMA                               59
 #define KEY_SLASH                               61
 
-#endif //OPENKEY_LINUX_H
+#endif //OHMYKEY_LINUX_H

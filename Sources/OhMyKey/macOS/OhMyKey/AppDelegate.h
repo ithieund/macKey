@@ -1,15 +1,15 @@
 //
 //  AppDelegate.h
-//  ModernKey
+//  OhMyKey
 //
 //  Created by Tuyen on 1/18/19.
-//  Copyright © 2019 Tuyen Mai. All rights reserved.
+//  Copyright © 2019 Tuyen Mai (OpenKey). Fork: OhMyKey © 2026 Hung Doan. GPL.
 //
 
 #import <Cocoa/Cocoa.h>
 #import "ViewController.h"
 
-#define OPENKEY_BUNDLE @"com.tuyenmai.openkey"
+#define OHMYKEY_BUNDLE @"com.hungdoansy.ohmykey"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 

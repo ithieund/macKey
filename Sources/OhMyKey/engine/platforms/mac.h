@@ -5,8 +5,8 @@
 //
 
 
-#ifndef OPENKEY_MAC_H
-#define OPENKEY_MAC_H
+#ifndef OHMYKEY_MAC_H
+#define OHMYKEY_MAC_H
 
 //define Key code for mac keyboard
 #define KEY_ESC                                 53
@@ -75,4 +75,4 @@
 #define KEY_COMMA                               43
 #define KEY_SLASH                               44
 
-#endif //OPENKEY_MAC_H
+#endif //OHMYKEY_MAC_H

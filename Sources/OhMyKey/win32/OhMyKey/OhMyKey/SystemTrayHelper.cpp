@@ -1,12 +1,12 @@
 ﻿/*----------------------------------------------------------
-OpenKey - The Cross platform Open source Vietnamese Keyboard application.
+OhMyKey - The Cross platform Open source Vietnamese Keyboard application.
 
-Copyright (C) 2019 Mai Vu Tuyen
-Contact: maivutuyen.91@gmail.com
-Github: https://github.com/tuyenvm/OpenKey
-Fanpage: https://www.facebook.com/OpenKeyVN
+Copyright (C) 2019 Mai Vu Tuyen (original OpenKey)
+Copyright (C) 2026 Hung Doan (OhMyKey fork)
+Github: https://github.com/hungdoansy/OhMyKey
+Based on OpenKey: https://github.com/tuyenvm/OpenKey
 
-This file is belong to the OpenKey project, Win32 version
+This file is belong to the OhMyKey project, Win32 version
 which is released under GPL license.
 You can fork, modify, improve this program. If you
 redistribute your new version, it MUST be open source.
@@ -38,8 +38,8 @@ redistribute your new version, it MUST be open source.
 #define POPUP_MACRO_TABLE 990
 
 #define POPUP_CONTROL_PANEL 1000
-#define POPUP_ABOUT_OPENKEY 1010
-#define POPUP_OPENKEY_EXIT 2000
+#define POPUP_ABOUT_OHMYKEY 1010
+#define POPUP_OHMYKEY_EXIT 2000
 
 #define MODIFY_MENU(MENU, COMMAND, DATA) ModifyMenu(MENU, COMMAND, \
 											MF_BYCOMMAND | (DATA ? MF_CHECKED : MF_UNCHECKED), \
@@ -69,8 +69,8 @@ map<UINT, LPCTSTR> menuData = {
 	{POPUP_QUICK_CONVERT, _T("Chuyển mã nhanh")},
 	{POPUP_MACRO_TABLE, _T("Cấu hình gõ tắt...")},
 	{POPUP_CONTROL_PANEL, _T("Bảng điều khiển...")},
-	{POPUP_ABOUT_OPENKEY, _T("Giới thiệu OpenKey")},
-	{POPUP_OPENKEY_EXIT, _T("Thoát")},
+	{POPUP_ABOUT_OHMYKEY, _T("Giới thiệu OhMyKey")},
+	{POPUP_OHMYKEY_EXIT, _T("Thoát")},
 };
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -152,11 +152,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) 
 			case POPUP_CONTROL_PANEL:
 				AppDelegate::getInstance()->onControlPanel();
 				break;
-			case POPUP_ABOUT_OPENKEY:
-				AppDelegate::getInstance()->onOpenKeyAbout();
+			case POPUP_ABOUT_OHMYKEY:
+				AppDelegate::getInstance()->onOhMyKeyAbout();
 				break;
-			case POPUP_OPENKEY_EXIT:
-				AppDelegate::getInstance()->onOpenKeyExit();
+			case POPUP_OHMYKEY_EXIT:
+				AppDelegate::getInstance()->onOhMyKeyExit();
 				break;
 			}
 			SystemTrayHelper::updateData();
@@ -232,9 +232,9 @@ void SystemTrayHelper::createPopupMenu() {
 	AppendMenu(popupMenu, MF_SEPARATOR, 0, 0);
 
 	AppendMenu(popupMenu, MF_STRING, POPUP_CONTROL_PANEL, menuData[POPUP_CONTROL_PANEL]);
-	AppendMenu(popupMenu, MF_UNCHECKED, POPUP_ABOUT_OPENKEY, menuData[POPUP_ABOUT_OPENKEY]);
+	AppendMenu(popupMenu, MF_UNCHECKED, POPUP_ABOUT_OHMYKEY, menuData[POPUP_ABOUT_OHMYKEY]);
 	AppendMenu(popupMenu, MF_SEPARATOR, 0, 0);
-	AppendMenu(popupMenu, MF_UNCHECKED, POPUP_OPENKEY_EXIT, menuData[POPUP_OPENKEY_EXIT]);
+	AppendMenu(popupMenu, MF_UNCHECKED, POPUP_OHMYKEY_EXIT, menuData[POPUP_OHMYKEY_EXIT]);
 
 	SetMenuDefaultItem(popupMenu, POPUP_CONTROL_PANEL, false);
 }

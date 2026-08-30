@@ -1,12 +1,12 @@
 /*----------------------------------------------------------
-OpenKey - The Cross platform Open source Vietnamese Keyboard application.
+OhMyKey - The Cross platform Open source Vietnamese Keyboard application.
 
-Copyright (C) 2019 Mai Vu Tuyen
-Contact: maivutuyen.91@gmail.com
-Github: https://github.com/tuyenvm/OpenKey
-Fanpage: https://www.facebook.com/OpenKeyVN
+Copyright (C) 2019 Mai Vu Tuyen (original OpenKey)
+Copyright (C) 2026 Hung Doan (OhMyKey fork)
+Github: https://github.com/hungdoansy/OhMyKey
+Based on OpenKey: https://github.com/tuyenvm/OpenKey
 
-This file is belong to the OpenKey project, Win32 version
+This file is belong to the OhMyKey project, Win32 version
 which is released under GPL license.
 You can fork, modify, improve this program. If you
 redistribute your new version, it MUST be open source.
@@ -52,9 +52,9 @@ INT_PTR ConvertToolDialog::eventProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
 				this->onCheckboxClicked((HWND)lParam);
 			}
 			else if (HIWORD(wParam) == EN_CHANGE) {
-				_lastKeyCode = OpenKeyManager::_lastKeyCode;
+				_lastKeyCode = OhMyKeyManager::_lastKeyCode;
 				if (_lastKeyCode > 0) {
-					OpenKeyManager::_lastKeyCode = 0;
+					OhMyKeyManager::_lastKeyCode = 0;
 					this->onCharacter((HWND)lParam, _lastKeyCode);
 				}
 			}
@@ -74,7 +74,7 @@ void ConvertToolDialog::initDialog() {
 	comboboxSource = GetDlgItem(hDlg, IDC_COMBO_TABLE_CODE_SRC);
 	comboboxDest = GetDlgItem(hDlg, IDC_COMBO_TABLE_CODE_DST);
 
-	vector<LPCTSTR>& tableCode = OpenKeyManager::getTableCode();
+	vector<LPCTSTR>& tableCode = OhMyKeyManager::getTableCode();
 	for (int i = 0; i < tableCode.size(); i++) {
 		SendMessage(comboboxSource, CB_ADDSTRING, i, reinterpret_cast<LPARAM>(tableCode[i]));
 		SendMessage(comboboxDest, CB_ADDSTRING, i, reinterpret_cast<LPARAM>(tableCode[i]));
@@ -236,12 +236,12 @@ void ConvertToolDialog::onSwitchButton() {
 }
 
 void ConvertToolDialog::onConvertButton() {
-	if (OpenKeyHelper::quickConvert()) {
+	if (OhMyKeyHelper::quickConvert()) {
 		//alert when complete
 		if (!convertToolDontAlertWhenCompleted) {
 			TCHAR msg[256];
 			LoadString(hInstance, IDS_STRING_CONVERT_COMPLETED, msg, 256);
-			MessageBox(this->hDlg, msg, _T("OpenKey"), MB_OK);
+			MessageBox(this->hDlg, msg, _T("OhMyKey"), MB_OK);
 		}
 	}
 }
