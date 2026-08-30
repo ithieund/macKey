@@ -23,6 +23,11 @@ redistribute your new version, it MUST be open source.
 static BYTE* _regData = 0;
 
 static LPCTSTR sk = TEXT("SOFTWARE\\hungdoansy\\OhMyKey");
+//Registry key OpenKey used, the project OhMyKey was forked from. Every setting,
+//the macro table and the smart-switch table lived here, so we copy the whole tree
+//across once when OhMyKey starts without a key of its own. Left in place afterwards
+//because the user may still run OpenKey.
+static LPCTSTR skLegacy = TEXT("SOFTWARE\\TuyenMai\\OpenKey");
 static HKEY hKey;
 static LPCTSTR _runOnStartupKeyPath = _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run");
 static TCHAR _executePath[MAX_PATH];
@@ -40,10 +45,32 @@ int CF_RTF = RegisterClipboardFormat(_T("Rich Text Format"));
 int CF_HTML = RegisterClipboardFormat(_T("HTML Format"));
 int CF_OHMYKEY = RegisterClipboardFormat(_T("OhMyKey Format"));
 
+//Copy OpenKey's settings into OhMyKey's key the first time OhMyKey runs. Only ever
+//reached from openKey() right after the new key was created, so it cannot overwrite
+//settings the user already made under the new name.
+static void migrateLegacyRegistry() {
+	HKEY hLegacy;
+	if (RegOpenKeyEx(HKEY_CURRENT_USER, skLegacy, NULL, KEY_READ, &hLegacy) != ERROR_SUCCESS)
+		return;
+	RegCopyTree(hLegacy, NULL, hKey);
+	RegCloseKey(hLegacy);
+
+	//The one value whose name carried the old product name.
+	DWORD val = 0, size = sizeof(val);
+	if (RegQueryValueEx(hKey, _T("vTempOffOpenKey"), 0, 0, (LPBYTE)&val, &size) == ERROR_SUCCESS) {
+		RegSetValueEx(hKey, _T("vTempOffOhMyKey"), 0, REG_DWORD, (LPBYTE)&val, sizeof(val));
+		RegDeleteValue(hKey, _T("vTempOffOpenKey"));
+	}
+}
+
 void OhMyKeyHelper::openKey() {
-	LONG nError = RegOhMyKeyEx(HKEY_CURRENT_USER, sk, NULL, KEY_ALL_ACCESS, &hKey);
+	LONG nError = RegOpenKeyEx(HKEY_CURRENT_USER, sk, NULL, KEY_ALL_ACCESS, &hKey);
 	if (nError == ERROR_FILE_NOT_FOUND) 	{
-		nError = RegCreateKeyEx(HKEY_CURRENT_USER, sk, NULL, NULL, REG_OPTION_NON_VOLATILE, KEY_CREATE_SUB_KEY, NULL, &hKey, NULL);
+		//KEY_ALL_ACCESS, not KEY_CREATE_SUB_KEY: callers write values through this
+		//handle straight after creating it, which KEY_CREATE_SUB_KEY does not allow.
+		nError = RegCreateKeyEx(HKEY_CURRENT_USER, sk, NULL, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL);
+		if (nError == ERROR_SUCCESS)
+			migrateLegacyRegistry();
 	}
 	if (nError) {
 		LOG(L"result %d\n", nError);
@@ -92,6 +119,16 @@ BYTE * OhMyKeyHelper::getRegBinary(LPCTSTR key, DWORD& outSize) {
 }
 
 void OhMyKeyHelper::registerRunOnStartup(const int& val) {
+	//Drop OpenKey's autostart entries first. They point at the old executable, so
+	//leaving them behind would keep launching OpenKey alongside OhMyKey - and two
+	//input methods running at once fight over every keystroke.
+	HKEY hLegacyRun;
+	if (RegOpenKeyEx(HKEY_CURRENT_USER, _runOnStartupKeyPath, NULL, KEY_ALL_ACCESS, &hLegacyRun) == ERROR_SUCCESS) {
+		RegDeleteValue(hLegacyRun, _T("OpenKey"));
+		RegCloseKey(hLegacyRun);
+	}
+	WinExec("schtasks /delete /tn OpenKey /f", SW_HIDE);
+
 	if (val) {
 		if (vRunAsAdmin) {
 			string path = wideStringToUtf8(getFullPath());
@@ -99,13 +136,13 @@ void OhMyKeyHelper::registerRunOnStartup(const int& val) {
 			sprintf_s(buff, "schtasks /create /sc onlogon /tn OhMyKey /rl highest /tr \"%s\" /f", path.c_str());
 			WinExec(buff, SW_HIDE);
 		} else {
-			RegOhMyKeyEx(HKEY_CURRENT_USER, _runOnStartupKeyPath, NULL, KEY_ALL_ACCESS, &hKey);
+			RegOpenKeyEx(HKEY_CURRENT_USER, _runOnStartupKeyPath, NULL, KEY_ALL_ACCESS, &hKey);
 			wstring path = getFullPath();
 			RegSetValueEx(hKey, _T("OhMyKey"), 0, REG_SZ, (byte*)path.c_str(), ((DWORD)path.size() + 1) * sizeof(TCHAR));
 			RegCloseKey(hKey);
 		}
 	} else {
-		RegOhMyKeyEx(HKEY_CURRENT_USER, _runOnStartupKeyPath, NULL, KEY_ALL_ACCESS, &hKey);
+		RegOpenKeyEx(HKEY_CURRENT_USER, _runOnStartupKeyPath, NULL, KEY_ALL_ACCESS, &hKey);
 		RegDeleteValue(hKey, _T("OhMyKey"));
 		RegCloseKey(hKey);
 		WinExec("schtasks /delete  /tn OhMyKey /f", SW_HIDE);

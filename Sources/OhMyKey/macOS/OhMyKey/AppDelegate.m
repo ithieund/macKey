@@ -111,8 +111,51 @@ extern bool convertToolDontAlertWhenCompleted;
     [NSApp terminate:0];
 }
 
+
+//Copy settings over from the OpenKey preferences domain the first time OhMyKey runs.
+//NSUserDefaults keys the standard domain on the bundle id, so the rename to
+//com.hungdoansy.ohmykey would otherwise silently reset every option, all macros and
+//the smart-switch table. Values come back as the plist types they were written as
+//(NSNumber for the integer options, NSData for macroData/smartSwitchKey), so copying
+//them straight into the new domain round-trips exactly.
+//The legacy domain is deliberately left in place: the user may still run OpenKey.
+static void migrateLegacyDefaultsIfNeeded(void) {
+    NSUserDefaults* ud = [NSUserDefaults standardUserDefaults];
+    if ([ud boolForKey:OHMYKEY_MIGRATED_KEY])
+        return;
+    //Never clobber settings the user already made in this domain.
+    if ([ud objectForKey:@"NonFirstTime"] != nil) {
+        [ud setBool:YES forKey:OHMYKEY_MIGRATED_KEY];
+        return;
+    }
+
+    CFStringRef legacyAppId = (__bridge CFStringRef)OHMYKEY_LEGACY_BUNDLE;
+    CFArrayRef keys = CFPreferencesCopyKeyList(legacyAppId, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+    if (keys == NULL)
+        return; //no OpenKey install to migrate from; retry next launch in case one appears
+    CFDictionaryRef values = CFPreferencesCopyMultiple(keys, legacyAppId, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+    if (values != NULL) {
+        [(__bridge NSDictionary*)values enumerateKeysAndObjectsUsingBlock:^(NSString* key, id value, BOOL* stop) {
+            if ([key hasPrefix:@"NS"])
+                return; //AppKit's own state (window frames, tooltip delay), not our settings
+            //The one setting whose key carries the old product name.
+            if ([key isEqualToString:@"vTempOffOpenKey"])
+                key = @"vTempOffOhMyKey";
+            [ud setObject:value forKey:key];
+        }];
+        CFRelease(values);
+    }
+    CFRelease(keys);
+
+    [ud setBool:YES forKey:OHMYKEY_MIGRATED_KEY];
+    [ud synchronize];
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     appDelegate = self;
+
+    //must run before anything reads NSUserDefaults
+    migrateLegacyDefaultsIfNeeded();
     
     [self registerSupportedNotification];
     
