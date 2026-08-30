@@ -195,8 +195,11 @@ static void migrateLegacyDefaultsIfNeeded(void) {
     }
     
     vShowIconOnDock = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"vShowIconOnDock"];
-    if (vShowIconOnDock)
-        [NSApp setActivationPolicy: NSApplicationActivationPolicyRegular];
+    // Dock icon follows window visibility: shown while a window is open, hidden when the last one closes.
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onAnyWindowWillClose:)
+                                                 name:NSWindowWillCloseNotification
+                                               object:nil];
     
     if (vSwitchKeyStatus & 0x8000)
         NSBeep();
@@ -372,7 +375,45 @@ static void migrateLegacyDefaultsIfNeeded(void) {
 }
 
 -(void)showIconOnDock:(BOOL)val {
-    [NSApp setActivationPolicy: val ? NSApplicationActivationPolicyRegular : NSApplicationActivationPolicyAccessory];
+    [self updateDockIconVisibility];
+}
+
+#pragma mark -Dock icon
+
+-(BOOL)hasVisibleAppWindow {
+    for (NSWindowController *wc in @[_mainWC ?: (id)[NSNull null], _macroWC ?: (id)[NSNull null],
+                                     _convertWC ?: (id)[NSNull null], _aboutWC ?: (id)[NSNull null]]) {
+        if ([wc isKindOfClass:[NSWindowController class]] && [wc isWindowLoaded] && [wc.window isVisible])
+            return YES;
+    }
+    return NO;
+}
+
+// Regular (Dock icon) only while one of our windows is open and the user allows it;
+// Accessory (menu bar only) otherwise, so Cmd+W looks like the app went away while it keeps running.
+-(void)updateDockIconVisibility {
+    BOOL wantIcon = vShowIconOnDock && [self hasVisibleAppWindow];
+    NSApplicationActivationPolicy policy = wantIcon ? NSApplicationActivationPolicyRegular
+                                                    : NSApplicationActivationPolicyAccessory;
+    if ([NSApp activationPolicy] != policy)
+        [NSApp setActivationPolicy:policy];
+}
+
+-(void)onAnyWindowWillClose:(NSNotification *)note {
+    // the window is still visible during willClose; re-evaluate once it is actually gone
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateDockIconVisibility];
+    });
+}
+
+-(void)presentWindow:(NSWindow *)window {
+    if ([window isVisible])
+        return;
+    if (vShowIconOnDock)
+        [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+    [NSApp activateIgnoringOtherApps:YES];
+    [window makeKeyAndOrderFront:nil];
+    [window setLevel:NSFloatingWindowLevel];
 }
 
 #pragma mark -StatusBar menu data
@@ -519,11 +560,7 @@ static void migrateLegacyDefaultsIfNeeded(void) {
     if (_convertWC == nil) {
         _convertWC = [[NSStoryboard storyboardWithName:@"Main" bundle:nil] instantiateControllerWithIdentifier:@"ConvertWindow"];
     }
-    //[OhMyKeyManager showDockIcon:YES];
-    if ([_convertWC.window isVisible])
-        return;
-    [_convertWC.window makeKeyAndOrderFront:nil];
-    [_convertWC.window setLevel:NSFloatingWindowLevel];
+    [self presentWindow:_convertWC.window];
 }
 
 -(void)onQuickConvert {
@@ -540,36 +577,21 @@ static void migrateLegacyDefaultsIfNeeded(void) {
     if (_mainWC == nil) {
         _mainWC = [[NSStoryboard storyboardWithName:@"Main" bundle:nil] instantiateControllerWithIdentifier:@"OhMyKey"];
     }
-    //[OhMyKeyManager showDockIcon:YES];
-    if ([_mainWC.window isVisible]) {
-        return;
-    }
-    [_mainWC.window makeKeyAndOrderFront:nil];
-    [_mainWC.window setLevel:NSFloatingWindowLevel];
+    [self presentWindow:_mainWC.window];
 }
 
 -(void) onMacroSelected {
     if (_macroWC == nil) {
         _macroWC = [[NSStoryboard storyboardWithName:@"Main" bundle:nil] instantiateControllerWithIdentifier:@"MacroWindow"];
     }
-    //[OhMyKeyManager showDockIcon:YES];
-    if ([_macroWC.window isVisible])
-        return;
-    
-    [_macroWC.window makeKeyAndOrderFront:nil];
-    [_macroWC.window setLevel:NSFloatingWindowLevel];
+    [self presentWindow:_macroWC.window];
 }
 
 -(void) onAboutSelected {
     if (_aboutWC == nil) {
         _aboutWC = [[NSStoryboard storyboardWithName:@"Main" bundle:nil] instantiateControllerWithIdentifier:@"AboutWindow"];
     }
-    //[OhMyKeyManager showDockIcon:YES];
-    if ([_aboutWC.window isVisible])
-        return;
-
-    [_aboutWC.window makeKeyAndOrderFront:nil];
-    [_aboutWC.window setLevel:NSFloatingWindowLevel];
+    [self presentWindow:_aboutWC.window];
 }
 
 #pragma mark -Short key event
