@@ -2,8 +2,8 @@
 //  SettingsView.swift
 //  OhMyKey
 //
-//  The control panel. Four tabs of grouped settings, laid out the way System Settings
-//  lays out its own panes, over a fixed header that carries the three things people
+//  The control panel. Four panes of grouped settings behind a segmented control, laid out
+//  the way System Settings lays out its own panes, over a fixed header that carries the three things people
 //  actually come here to change: the mode, the input method and the code table.
 //
 
@@ -11,10 +11,12 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject private var settings: AppSettings
-    @State private var selectedTab = Tab.typing
+    // Remembered across launches, like System Settings. Also lets the preview harness
+    // open a given pane: `-SettingsSelectedTab system`.
+    @AppStorage("SettingsSelectedTab") private var selectedTab = Tab.typing
     @State private var showResetConfirmation = false
 
-    private enum Tab: Hashable {
+    private enum Tab: String {
         case typing, macro, system, about
     }
 
@@ -22,21 +24,28 @@ struct SettingsView: View {
         VStack(spacing: 0) {
             InputModeHeader()
             Divider()
-            TabView(selection: $selectedTab) {
-                TypingSettings()
-                    .tabItem { Label("Bộ gõ", systemImage: "keyboard") }
-                    .tag(Tab.typing)
-                MacroSettings()
-                    .tabItem { Label("Gõ tắt", systemImage: "text.badge.plus") }
-                    .tag(Tab.macro)
-                SystemSettings()
-                    .tabItem { Label("Hệ thống", systemImage: "gearshape") }
-                    .tag(Tab.system)
-                AboutPane()
-                    .tabItem { Label("Giới thiệu", systemImage: "info.circle") }
-                    .tag(Tab.about)
+            // A segmented control rather than TabView: TabView on macOS draws its own
+            // bordered box around the content, and a grouped Form inside that box reads as
+            // a group inside a group. The picker gives the same four tabs without the frame.
+            Picker("", selection: $selectedTab) {
+                Text("Bộ gõ").tag(Tab.typing)
+                Text("Gõ tắt").tag(Tab.macro)
+                Text("Hệ thống").tag(Tab.system)
+                Text("Giới thiệu").tag(Tab.about)
             }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            .fixedSize()
             .padding(.top, 10)
+            Group {
+                switch selectedTab {
+                case .typing: TypingSettings()
+                case .macro: MacroSettings()
+                case .system: SystemSettings()
+                case .about: AboutPane()
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             Divider()
             ActionBar {
                 Button("Khôi phục mặc định") { showResetConfirmation = true }
@@ -228,6 +237,7 @@ private struct MacroSettings: View {
 private struct SystemSettings: View {
     @EnvironmentObject private var settings: AppSettings
     @State private var checkingForUpdate = false
+    @State private var showRelaunchPrompt = false
 
     var body: some View {
         Form {
@@ -238,6 +248,25 @@ private struct SystemSettings: View {
             }
 
             Section("Giao diện") {
+                Picker(selection: Binding(
+                    get: { AppLanguage.current },
+                    set: { language in
+                        guard language != AppLanguage.current else { return }
+                        AppLanguage.current = language
+                        showRelaunchPrompt = true
+                    }
+                )) {
+                    ForEach(AppLanguage.allCases) { language in
+                        Text(verbatim: "\(language.flag)  \(language.name)").tag(language)
+                    }
+                } label: {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Ngôn ngữ giao diện")
+                        Text("Có hiệu lực sau khi khởi động lại OhMyKey.")
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                    }
+                }
                 SettingToggle(title: "Biểu tượng đơn sắc trên thanh menu",
                               detail: "Tự đổi màu theo giao diện sáng hoặc tối.",
                               isOn: settings.binding(.grayIcon))
@@ -268,6 +297,12 @@ private struct SystemSettings: View {
             }
         }
         .formStyle(.grouped)
+        .alert("Khởi động lại OhMyKey để đổi ngôn ngữ?", isPresented: $showRelaunchPrompt) {
+            Button("Để sau", role: .cancel) {}
+            Button("Khởi động lại") { AppLanguage.relaunch() }
+        } message: {
+            Text("Ngôn ngữ mới sẽ được dùng ở lần mở tiếp theo.")
+        }
     }
 }
 
