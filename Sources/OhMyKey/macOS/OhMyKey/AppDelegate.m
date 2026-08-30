@@ -408,17 +408,19 @@ static void migrateLegacyDefaultsIfNeeded(void) {
     //fill data
     NSInteger intInputMethod = [[NSUserDefaults standardUserDefaults] integerForKey:@"InputMethod"];
     NSInteger grayIcon = [[NSUserDefaults standardUserDefaults] integerForKey:@"GrayIcon"];
-    if (intInputMethod == 1) {
-        [menuInputMethod setState:NSControlStateValueOn];
-        statusItem.button.image = [NSImage imageNamed:@"Status"];
-        [statusItem.button.image setTemplate:(grayIcon ? YES : NO)];
-        statusItem.button.alternateImage = [NSImage imageNamed:@"StatusHighlighted"];
-    } else {
-        [menuInputMethod setState:NSControlStateValueOff];
-        statusItem.button.image = [NSImage imageNamed:@"StatusEng"];
-        [statusItem.button.image setTemplate:(grayIcon ? YES : NO)];
-        statusItem.button.alternateImage = [NSImage imageNamed:@"StatusHighlightedEng"];
-    }
+    BOOL isVietnamese = (intInputMethod == 1);
+    [menuInputMethod setState:(isVietnamese ? NSControlStateValueOn : NSControlStateValueOff)];
+
+    //Copy before marking as template: +imageNamed: hands out a shared cached image,
+    //so setting the flag on it would change that image everywhere in the app.
+    NSImage* icon = [[NSImage imageNamed:(isVietnamese ? @"Status" : @"StatusEng")] copy];
+    [icon setTemplate:(grayIcon ? YES : NO)];
+    statusItem.button.image = icon;
+
+    //A template image is inverted by AppKit while the menu is open, so an explicit
+    //highlight image is only needed when template rendering is off.
+    statusItem.button.alternateImage = grayIcon ? nil
+        : [NSImage imageNamed:(isVietnamese ? @"StatusHighlighted" : @"StatusHighlightedEng")];
     vLanguage = (int)intInputMethod;
     
     NSInteger intInputType = [[NSUserDefaults standardUserDefaults] integerForKey:@"InputType"];
