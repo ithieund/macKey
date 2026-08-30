@@ -23,6 +23,7 @@
 //  stops separating cleanly from the menu bar behind it.
 
 import AppKit
+import CoreText
 
 // MARK: - Design constants (points; @2x is the same geometry at twice the scale)
 
@@ -34,8 +35,16 @@ let fontSize: CGFloat = 13      // .heavy at 13pt keeps stems ~1.9px at 1x, abov
 let squareAlpha: CGFloat = 0.85 // the "slightly grey" mask
 let squareWhite: CGFloat = 0.56 // #8E8E93, legible on light and dark when not templated
 
-// "V" sits optically low because it tapers to a point; nudge it up slightly.
-let opticalNudge: [String: CGFloat] = ["V": 0.5, "E": 0.0]
+// SF Rounded rather than the default SF Pro: its softer terminals match the rounded
+// square, and at this size the letter is a hole in a shape rather than text, so the
+// friendlier letterform reads better than the neutral one. Heavy rather than black
+// keeps the "E" counters open at 1x.
+func maskFont() -> NSFont {
+    let base = NSFont.systemFont(ofSize: fontSize, weight: .heavy)
+    guard let rounded = base.fontDescriptor.withDesign(.rounded),
+          let font = NSFont(descriptor: rounded, size: fontSize) else { return base }
+    return font
+}
 
 struct Variant {
     let name: String
@@ -105,20 +114,22 @@ func render(_ variant: Variant, scale: Int) -> Data {
 
     // Knock the letter out of the square: destinationOut erases wherever the
     // glyph paints, leaving a transparent letter rather than a drawn one.
-    let attributes: [NSAttributedString.Key: Any] = [
-        .font: NSFont.systemFont(ofSize: fontSize, weight: .heavy),
-        .foregroundColor: NSColor.black,
-    ]
-    let text = NSAttributedString(string: variant.letter, attributes: attributes)
-    // Use the glyph's inked bounds, not the line box, so the letter is centred on
-    // what you actually see rather than on the font's ascender/descender metrics.
-    let bounds = text.boundingRect(with: NSSize(width: 100, height: 100),
-                                   options: [.usesDeviceMetrics])
-    let origin = NSPoint(x: box.midX - bounds.midX,
-                         y: box.midY - bounds.midY + (opticalNudge[variant.letter] ?? 0))
-    ctx.compositingOperation = .destinationOut
-    text.draw(at: origin)
-    ctx.compositingOperation = .sourceOver
+    let text = NSAttributedString(string: variant.letter,
+                                  attributes: [.font: maskFont(),
+                                               .foregroundColor: NSColor.black])
+    let line = CTLineCreateWithAttributedString(text)
+    // Centre on the inked bounds, via CoreText. -[NSAttributedString drawAtPoint:]
+    // positions the line box instead, which includes ascender and descender space the
+    // letter does not fill, and left the glyph sitting visibly high in the square.
+    // CTLineGetImageBounds measures the pixels the glyph actually covers, relative to
+    // the baseline origin, so offsetting the text position by its centre centres what
+    // you see - no per-letter fudge factor needed.
+    let ink = CTLineGetImageBounds(line, ctx.cgContext)
+    ctx.cgContext.saveGState()
+    ctx.cgContext.setBlendMode(.destinationOut)
+    ctx.cgContext.textPosition = CGPoint(x: box.midX - ink.midX, y: box.midY - ink.midY)
+    CTLineDraw(line, ctx.cgContext)
+    ctx.cgContext.restoreGState()
 
     guard let data = rep.representation(using: .png, properties: [:]) else {
         FileHandle.standardError.write("Failed to encode \(variant.name)\n".data(using: .utf8)!)
