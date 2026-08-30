@@ -2635,6 +2635,125 @@
           }
         }
       }
+    },
+    "Có hiệu lực sau khi khởi động lại OhMyKey.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Takes effect after OhMyKey restarts."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Có hiệu lực sau khi khởi động lại OhMyKey."
+          }
+        }
+      }
+    },
+    "Khởi động lại": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restart"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khởi động lại"
+          }
+        }
+      }
+    },
+    "Khởi động lại OhMyKey để đổi ngôn ngữ?": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restart OhMyKey to change the language?"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khởi động lại OhMyKey để đổi ngôn ngữ?"
+          }
+        }
+      }
+    },
+    "Ngôn ngữ giao diện": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Interface language"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ngôn ngữ giao diện"
+          }
+        }
+      }
+    },
+    "Ngôn ngữ mới sẽ được dùng ở lần mở tiếp theo.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The new language will be used the next time the app opens."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ngôn ngữ mới sẽ được dùng ở lần mở tiếp theo."
+          }
+        }
+      }
+    },
+    "Theo hệ thống": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Follow system"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Theo hệ thống"
+          }
+        }
+      }
+    },
+    "Để sau": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Later"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Để sau"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
