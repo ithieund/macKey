@@ -38,7 +38,7 @@ static CFRunLoopSourceRef runLoopSource;
     if (_isInited)
         return true;
     
-    //init modernKey
+    //init OhMyKey
     OhMyKeyInit();
     
     // Create an event tap. We are interested in key presses.

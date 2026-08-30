@@ -1,12 +1,10 @@
 # OhMyKey for Windows
+
+OhMyKey là bản fork của [OpenKey](https://github.com/tuyenvm/OpenKey) do Mai Vũ Tuyên phát triển.
 [![GitHub release](https://img.shields.io/github/v/release/hungdoansy/OhMyKey.svg)](https://github.com/hungdoansy/OhMyKey/releases/latest)
 - OhMyKey phiên bản cho Windows bắt đầu từ bản 1.5, có tất cả các tính năng của bản macOS.  
 - OhMyKey mặc định chạy ở chế độ `Administrator` để có thể dễ dàng gõ Tiếng Việt trong **game**. Mã nguồn đã được phát hành công khai dưới giấy phép **GPL** nên các bạn hoàn toàn yên tâm về tính minh bạch của chương trình, không keylog, không backdoor,...
 - OhMyKey for Windows hỗ trợ từ Windows Vista trở lên, Windows XP thì chưa có cơ hội để test, Windows 2000 trở về trước thì chắc chắn không thể hỗ trợ rồi.
-![Giao diện chính](https://raw.githubusercontent.com/tuyenvm/tuyenvm.github.io/master/images/win32_2.0_1.png "Main UI")
-
-
-
 ## Tính năng
 Mặc định, OhMyKey cho phép gõ với chế độ bỏ dấu tự do, không cần phải bỏ dấu sau nguyên âm.
 * Hỗ trợ kiểu gõ:
@@ -53,10 +51,6 @@ Mặc định, OhMyKey cho phép gõ với chế độ bỏ dấu tự do, khôn
 - Xong rồi một biểu tượng chữ `V` sẽ hiện trên system tray, đúp click vô đó để mở bảng điều khiển, cấu hình những thứ bạn cần.
 - Xong.
 ## Một số hình ảnh khác
-![Menu](https://raw.githubusercontent.com/tuyenvm/tuyenvm.github.io/master/images/win32_5.png "Menu")
-![Bảng gõ tắt](https://raw.githubusercontent.com/tuyenvm/tuyenvm.github.io/master/images/win32_2.png "Macro table")
-![Công cụ chuyển mã](https://raw.githubusercontent.com/tuyenvm/tuyenvm.github.io/master/images/win32_3.png "Convert tool")
-
 ## Thông tin
 - Dự án OhMyKey ra đời vào ngày 18/01/2019. OhMyKey được viết lại hoàn toàn mới bởi tác giả Mai Vũ Tuyên. Mục đích ra đời của OhMyKey là để khắc phục lỗi gạch chân khó chịu do cơ chế `preedit` gây ra trên hệ điều hành macOS
 - Phiên bản đầu tiên cho hệ điều hành macOS được phát hành trên Github vào ngày 01/02/2019  
@@ -68,10 +62,7 @@ Trải qua nhiều lần cập nhật và phát triển, ngày 31/07/2019, OhMyK
 ## Mã nguồn
 - Mã nguồn cho Windows được build thành công với Microsoft Visual Studio 2017.
 ## Giấy phép
-OhMyKey for Windows được phát hành dưới giấy phép GPL, điều này nghĩa là bạn hoàn toàn có thể tự do tải mã nguồn về chỉnh sửa, cải tiến theo mục đích của bạn. Nếu bạn tái phân phối bản cải tiến của bạn, bạn **phải** công bố mã nguồn và credit OhMyKey bản gốc.
+OhMyKey for Windows được phát hành dưới giấy phép GPL, điều này nghĩa là bạn hoàn toàn có thể tự do tải mã nguồn về chỉnh sửa, cải tiến theo mục đích của bạn. Nếu bạn tái phân phối bản cải tiến của bạn, bạn **phải** công bố mã nguồn và credit OpenKey (dự án gốc) và OhMyKey.
 
 ## Một điều nữa
-Đừng quên ủng hộ tác giả bằng cách mua ly cafe cho tác giả tỉnh ngủ nhé: [Gửi cafe](https://paypal.me/tuyenmai)  
-Hoặc trực tiếp qua ví momo:   
-![Donate by momo](https://tuyenvm.github.io/images/momo.png "Momo").   
 Cảm ơn các bạn.

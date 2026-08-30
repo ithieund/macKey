@@ -1,6 +1,6 @@
 //
 //  Macro.cpp
-//  OpenKey
+//  OhMyKey
 //
 //  Created by Tuyen on 8/4/19.
 //  Copyright © 2019 Tuyen Mai. All rights reserved.
@@ -248,6 +248,9 @@ void onTableCodeChange() {
 void saveToFile(const string& path) {
     ofstream myfile;
     myfile.open(path.c_str());
+    // Keep this header string verbatim across the OhMyKey rename: it is the
+    // on-disk format marker for exported macro files, shared with UniKey and
+    // with OpenKey builds. Changing it would break importing existing files.
     myfile << ";Compatible OpenKey Macro Data file for UniKey*** version=1 ***\n";
     for (std::map<vector<Uint32>, MacroData>::iterator it = macroMap.begin(); it != macroMap.end(); ++it) {
         myfile <<it->second.macroText << ":" << it->second.macroContent<<"\n";

@@ -1,4 +1,12 @@
-# OpenKey Change Log
+# OhMyKey Change Log
+
+##### Đổi tên thành OhMyKey:
+- OhMyKey là bản fork của OpenKey. Ứng dụng đổi bundle ID sang `com.hungdoansy.ohmykey`.
+- Thiết lập, macro và dữ liệu chuyển chế độ thông minh được **tự động chuyển** từ bản OpenKey cũ trong lần chạy đầu tiên.
+- Do bundle ID thay đổi, macOS coi đây là ứng dụng mới: bạn cần **cấp lại quyền Accessibility** trong *System Settings -> Privacy & Security -> Accessibility*.
+- Biểu tượng trên thanh menu được vẽ lại để dễ nhìn hơn trên nền sáng.
+
+##### Lịch sử của OpenKey (bản gốc) ở phía dưới:
 
 ##### OpenKey for Linux: (in development)
 
