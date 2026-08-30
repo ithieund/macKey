@@ -97,7 +97,7 @@ static CFRunLoopSourceRef runLoopSource;
             @"Unicode",
             @"TCVN3 (ABC)",
             @"VNI Windows",
-            @"Unicode tổ hợp",
+            NSLocalizedString(@"Unicode tổ hợp", nil),
             @"Vietnamese Locale CP 1258", nil];
 }
 
@@ -190,14 +190,14 @@ static CFRunLoopSourceRef runLoopSource;
 
 +(void)showUpdateMessage:(NSWindow*)parent needUpdating:(BOOL)needUpdating newVersion:(NSString*)versionString {
     NSAlert *alert = [[NSAlert alloc] init];
-    [alert setMessageText:(needUpdating ? [NSString stringWithFormat:@"OhMyKey Có phiên bản mới (%@), bạn có muốn cập nhật không?", versionString] : @"Bạn đang dùng phiên bản mới nhất!")];
-    [alert setInformativeText:(needUpdating ? @"Bấm 'Có' để cập nhật OhMyKey." : @"")];
+    [alert setMessageText:(needUpdating ? [NSString stringWithFormat:NSLocalizedString(@"OhMyKey Có phiên bản mới (%@), bạn có muốn cập nhật không?", nil), versionString] : NSLocalizedString(@"Bạn đang dùng phiên bản mới nhất!", nil))];
+    [alert setInformativeText:(needUpdating ? NSLocalizedString(@"Bấm 'Có' để cập nhật OhMyKey.", nil) : @"")];
     
     if (!needUpdating) {
         [alert addButtonWithTitle:@"OK"];
     } else {
-        [alert addButtonWithTitle:@"Có"];
-        [alert addButtonWithTitle:@"Không"];
+        [alert addButtonWithTitle:NSLocalizedString(@"Có", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Không", nil)];
     }
     if (parent == nil) {
         [alert.window makeKeyAndOrderFront:nil];

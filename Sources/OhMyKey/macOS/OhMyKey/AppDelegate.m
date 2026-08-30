@@ -88,11 +88,11 @@ extern bool convertToolDontAlertWhenCompleted;
 
 -(void)askPermission {
     NSAlert *alert = [[NSAlert alloc] init];
-    [alert setMessageText: [NSString stringWithFormat:@"OhMyKey cần bạn cấp quyền để có thể hoạt động!"]];
-    [alert setInformativeText:@"Vui lòng chạy lại ứng dụng sau khi cấp quyền."];
+    [alert setMessageText: [NSString stringWithFormat:NSLocalizedString(@"OhMyKey cần bạn cấp quyền để có thể hoạt động!", nil)]];
+    [alert setInformativeText:NSLocalizedString(@"Vui lòng chạy lại ứng dụng sau khi cấp quyền.", nil)];
 
-    [alert addButtonWithTitle:@"Không"];
-    [alert addButtonWithTitle:@"Cấp quyền"];
+    [alert addButtonWithTitle:NSLocalizedString(@"Không", nil)];
+    [alert addButtonWithTitle:NSLocalizedString(@"Cấp quyền", nil)];
 
     [alert.window makeKeyAndOrderFront:nil];
     [alert.window setLevel:NSStatusWindowLevel];
@@ -269,35 +269,35 @@ static void migrateLegacyDefaultsIfNeeded(void) {
     theMenu = [[NSMenu alloc] initWithTitle:@""];
     [theMenu setAutoenablesItems:NO];
     
-    menuInputMethod = [theMenu addItemWithTitle:@"Bật Tiếng Việt"
+    menuInputMethod = [theMenu addItemWithTitle:NSLocalizedString(@"Bật Tiếng Việt", nil)
                                                      action:@selector(onInputMethodSelected)
                                               keyEquivalent:@""];
     [theMenu addItem:[NSMenuItem separatorItem]];
-    NSMenuItem* menuInputType = [theMenu addItemWithTitle:@"Kiểu gõ" action:nil keyEquivalent:@""];
+    NSMenuItem* menuInputType = [theMenu addItemWithTitle:NSLocalizedString(@"Kiểu gõ", nil) action:nil keyEquivalent:@""];
     
     [theMenu addItem:[NSMenuItem separatorItem]];
     
-    mnuUnicode = [theMenu addItemWithTitle:@"Unicode dựng sẵn" action:@selector(onCodeSelected:) keyEquivalent:@""];
+    mnuUnicode = [theMenu addItemWithTitle:NSLocalizedString(@"Unicode dựng sẵn", nil) action:@selector(onCodeSelected:) keyEquivalent:@""];
     mnuUnicode.tag = 0;
     mnuTCVN = [theMenu addItemWithTitle:@"TCVN3 (ABC)" action:@selector(onCodeSelected:) keyEquivalent:@""];
     mnuTCVN.tag = 1;
     mnuVNIWindows = [theMenu addItemWithTitle:@"VNI Windows" action:@selector(onCodeSelected:) keyEquivalent:@""];
     mnuVNIWindows.tag = 2;
-    NSMenuItem* menuCode = [theMenu addItemWithTitle:@"Bảng mã khác" action:nil keyEquivalent:@""];
+    NSMenuItem* menuCode = [theMenu addItemWithTitle:NSLocalizedString(@"Bảng mã khác", nil) action:nil keyEquivalent:@""];
     
     [theMenu addItem:[NSMenuItem separatorItem]];
     
-    [theMenu addItemWithTitle:@"Công cụ chuyển mã..." action:@selector(onConvertTool) keyEquivalent:@""];
-    mnuQuickConvert = [theMenu addItemWithTitle:@"Chuyển mã nhanh" action:@selector(onQuickConvert) keyEquivalent:@""];
+    [theMenu addItemWithTitle:NSLocalizedString(@"Công cụ chuyển mã...", nil) action:@selector(onConvertTool) keyEquivalent:@""];
+    mnuQuickConvert = [theMenu addItemWithTitle:NSLocalizedString(@"Chuyển mã nhanh", nil) action:@selector(onQuickConvert) keyEquivalent:@""];
     
     [theMenu addItem:[NSMenuItem separatorItem]];
     
-    [theMenu addItemWithTitle:@"Bảng điều khiển..." action:@selector(onControlPanelSelected) keyEquivalent:@""];
-    [theMenu addItemWithTitle:@"Gõ tắt..." action:@selector(onMacroSelected) keyEquivalent:@""];
-    [theMenu addItemWithTitle:@"Giới thiệu" action:@selector(onAboutSelected) keyEquivalent:@""];
+    [theMenu addItemWithTitle:NSLocalizedString(@"Bảng điều khiển...", nil) action:@selector(onControlPanelSelected) keyEquivalent:@""];
+    [theMenu addItemWithTitle:NSLocalizedString(@"Gõ tắt...", nil) action:@selector(onMacroSelected) keyEquivalent:@""];
+    [theMenu addItemWithTitle:NSLocalizedString(@"Giới thiệu", nil) action:@selector(onAboutSelected) keyEquivalent:@""];
     [theMenu addItem:[NSMenuItem separatorItem]];
     
-    [theMenu addItemWithTitle:@"Thoát" action:@selector(terminate:) keyEquivalent:@"q"];
+    [theMenu addItemWithTitle:NSLocalizedString(@"Thoát", nil) action:@selector(terminate:) keyEquivalent:@"q"];
     
     
     [self setInputTypeMenu:menuInputType];
@@ -344,7 +344,7 @@ static void migrateLegacyDefaultsIfNeeded(void) {
         else
             [hotKey appendFormat:@"%c", k];
     }
-    [mnuQuickConvert setTitle: hasAdd ? [NSString stringWithFormat:@"Chuyển mã nhanh - [%@]", [hotKey uppercaseString]] : @"Chuyển mã nhanh"];
+    [mnuQuickConvert setTitle: hasAdd ? [NSString stringWithFormat:NSLocalizedString(@"Chuyển mã nhanh - [%@]", nil), [hotKey uppercaseString]] : NSLocalizedString(@"Chuyển mã nhanh", nil)];
 }
 
 -(void)loadDefaultConfig {
@@ -566,10 +566,10 @@ static void migrateLegacyDefaultsIfNeeded(void) {
 -(void)onQuickConvert {
     if ([OhMyKeyManager quickConvert]) {
         if (!convertToolDontAlertWhenCompleted) {
-            [OhMyKeyManager showMessage: nil message:@"Chuyển mã thành công!" subMsg:@"Kết quả đã được lưu trong clipboard."];
+            [OhMyKeyManager showMessage: nil message:NSLocalizedString(@"Chuyển mã thành công!", nil) subMsg:NSLocalizedString(@"Kết quả đã được lưu trong clipboard.", nil)];
         }
     } else {
-        [OhMyKeyManager showMessage: nil message:@"Không có dữ liệu trong clipboard!" subMsg:@"Hãy sao chép một đoạn text để chuyển đổi!"];
+        [OhMyKeyManager showMessage: nil message:NSLocalizedString(@"Không có dữ liệu trong clipboard!", nil) subMsg:NSLocalizedString(@"Hãy sao chép một đoạn text để chuyển đổi!", nil)];
     }
 }
 
