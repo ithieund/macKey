@@ -44,6 +44,8 @@
 		23E2E4A02314FD3A006CCC3E /* Vietnamese.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23E2E49B2314FD3A006CCC3E /* Vietnamese.cpp */; };
 		23F512852336386200397988 /* MJAccessibilityUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 23F512832336386200397988 /* MJAccessibilityUtils.m */; };
 		A534F32629D8B78100296F25 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23874B0F220160A500000BC8 /* Carbon.framework */; };
+		4F4D4B001D427AF25B91AD08 /* OhMyKeyBridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D4B007B9A5639A27679A6 /* OhMyKeyBridge.mm */; };
+		4F4D4B0067A320D08FB4128D /* Hotkey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4D4B004EE88D89C4845893 /* Hotkey.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -120,6 +122,10 @@
 		23E2E49C2314FD3A006CCC3E /* SmartSwitchKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmartSwitchKey.h; sourceTree = "<group>"; };
 		23F512832336386200397988 /* MJAccessibilityUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MJAccessibilityUtils.m; sourceTree = "<group>"; };
 		23F512842336386200397988 /* MJAccessibilityUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJAccessibilityUtils.h; sourceTree = "<group>"; };
+		4F4D4B00BD3F6255010D5EA4 /* OhMyKey-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OhMyKey-Bridging-Header.h; sourceTree = "<group>"; };
+		4F4D4B0084876C87E84F05CE /* OhMyKeyBridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OhMyKeyBridge.h; sourceTree = "<group>"; };
+		4F4D4B007B9A5639A27679A6 /* OhMyKeyBridge.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OhMyKeyBridge.mm; sourceTree = "<group>"; };
+		4F4D4B004EE88D89C4845893 /* Hotkey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hotkey.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +188,10 @@
 			isa = PBXGroup;
 			children = (
 				232DB1DF21FAED280049A0B5 /* Resources */,
+				4F4D4B00C71E237AED0167A1 /* UI */,
+				4F4D4B007B9A5639A27679A6 /* OhMyKeyBridge.mm */,
+				4F4D4B0084876C87E84F05CE /* OhMyKeyBridge.h */,
+				4F4D4B00BD3F6255010D5EA4 /* OhMyKey-Bridging-Header.h */,
 				23F512842336386200397988 /* MJAccessibilityUtils.h */,
 				23F512832336386200397988 /* MJAccessibilityUtils.m */,
 				232EDA5721F1B33E0085D362 /* AppDelegate.h */,
@@ -259,6 +269,14 @@
 			);
 			name = engine;
 			path = ../engine;
+			sourceTree = "<group>";
+		};
+		4F4D4B00C71E237AED0167A1 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				4F4D4B004EE88D89C4845893 /* Hotkey.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -349,6 +367,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F4D4B0067A320D08FB4128D /* Hotkey.swift in Sources */,
+				4F4D4B001D427AF25B91AD08 /* OhMyKeyBridge.mm in Sources */,
 				23E2E49F2314FD3A006CCC3E /* Engine.cpp in Sources */,
 				232EDA5C21F1B33E0085D362 /* ViewController.m in Sources */,
 				23E2E49E2314FD3A006CCC3E /* SmartSwitchKey.cpp in Sources */,
@@ -449,7 +469,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -503,7 +523,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -513,7 +533,11 @@
 		232EDA6921F1B33F0085D362 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "OhMyKey/OhMyKey-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -524,11 +548,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 2.0.4;
-				OTHER_LDFLAGS = (
-					"-lc++\n-lc++",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.hungdoansy.ohmykey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -538,7 +559,11 @@
 		232EDA6A21F1B33F0085D362 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "OhMyKey/OhMyKey-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -549,11 +574,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 2.0.4;
-				OTHER_LDFLAGS = (
-					"-lc++\n-lc++",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.hungdoansy.ohmykey;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
