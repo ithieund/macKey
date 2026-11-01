@@ -24,12 +24,13 @@ Dự án giữ lại phần giao diện macOS được viết lại bằng Swift
 
 ### Cải tiến trong macKey
 
+* **Cải tiến dropdown menu của ứng dụng**: thu gọn các tùy chọn cùng loại theo nhóm giúp dropdown gọn gàng, dễ nhìn hơn
 
-| Cải tiến dropdown menu của ứng dụng       | Bản cũ | Bản mới |
-| ---------------------------------------------- | -------- | --------- |
-| Cải tiến layout trang cấu hình dứng dụng | Bản cũ | Bản mới |
-| Tính năng mới                               | 1        | 1         |
-| Tính năng mới                               | 1        | 1         |
+<div align="center"><img src="docs/images/dropdown-menu.png" alt="Dropdown menu"></div>
+
+* **Cải tiến layout trang cấu hình dứng dụng**: cung cấp 4 thẻ cấu hình chính: Bộ gõ, Hệ thống, Tương thích, và Nâng cao
+
+<div align="center"><img src="docs/images/app-config-layout.png" alt="Bảng điều khiển macKey, tab layout"></div>
 
 * **Cấu hình tương thích**: bổ sung tùy chọn Chế độ gõ cho từng ứng dụng khác nhau, bạn có thể tùy chỉnh chế đỗ gõ riêng cho từng ứng dụng tùy vào tính chất của ứng dụng để tăng khả năng tương thích. VD: gõ tiếng Việt trong Microsoft Teams sẽ ổn định hơn với chế độ 'Dán từ bộ nhớ tạm'.
 * **Tùy chọn Nâng cao**: bổ sung các tùy chọn nâng cao giúp giải quyết các vấn đề đặc thù trên macOS.
