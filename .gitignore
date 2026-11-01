@@ -2,12 +2,6 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/Sources/OhMyKey/win32/OhMyKey/.vs/OhMyKey
-/Sources/OhMyKey/win32/OhMyKey/x64/Debug
-/Sources/OhMyKey/win32/OhMyKey/x64/Release
-/Sources/OhMyKey/win32/OhMyKey/OhMyKey/x64/Debug
-/Sources/OhMyKey/win32/OhMyKey/OhMyKey/x64/Release
-/Sources/OhMyKey/win32/OhMyKey/OhMyKeyUpdate/x64/Release
 
 # macOS / Xcode / editor artifacts
 .DS_Store

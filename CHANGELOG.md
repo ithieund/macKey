@@ -1,14 +1,44 @@
-# OhMyKey Change Log
+# Nhật ký thay đổi macKey
 
-##### Đổi tên thành OhMyKey:
+## macKey — Chưa phát hành
+
+### Bố cục và giao diện
+
+- Viết lại giao diện macOS bằng SwiftUI. Settings, Compatibility, gõ tắt, chuyển mã và About nay
+  dùng cửa sổ co giãn theo nội dung thay cho storyboard cũ có 118 control đặt kích thước cố định.
+- Thay giao diện tab có khung bằng segmented control gọn hơn và grouped form đáp ứng tốt hơn, để
+  nhãn vẫn dễ đọc ở các cỡ chữ hệ thống khác nhau.
+- Thêm bản địa hoá giao diện tiếng Anh và tiếng Việt, có thể cấu hình qua tuỳ chọn ngôn ngữ giao
+  diện macOS.
+- Làm mới icon ứng dụng và thanh menu, đồng thời chỉ hiển thị icon Dock khi một cửa sổ macKey đang
+  mở.
+
+### Tính năng mới và cải tiến
+
+- Thêm cửa sổ Compatibility có thể chỉnh sửa, với các chế độ gửi phím theo từng ứng dụng để xử lý
+  lỗi với trình duyệt, Chromium, Office và layout không phải QWERTY.
+- Thêm phương án dự phòng Secure Input để tạm chuyển sang input source tiếng Việt của macOS khi
+  macKey không thể nhận phím gõ.
+- Thêm trình chỉnh sửa gõ tắt riêng, hỗ trợ tạo, cập nhật, xoá, import và export.
+- Thêm script UI-only preview, build-and-install, local signing và unit test chuyên biệt để phát
+  triển, test an toàn và thuận tiện hơn.
+- Chuyển các tuỳ chọn OpenKey, macro và mục Smart Switch ở lần chạy đầu mà không thay đổi cài đặt
+  OpenKey gốc.
+
+### Dự án
+
+- macKey là bản fork của OhMyKey của hungdoansy; OhMyKey lại dựa trên OpenKey.
+- Đổi tên ứng dụng macOS thành macKey. Ứng dụng đổi bundle ID sang `vn.ithieund.mackey`. và chỉ giữ lại mã nguồn macOS trong repository.
+- Do bundle ID thay đổi, macOS coi đây là ứng dụng mới: bạn cần **cấp lại quyền Accessibility** trong *System Settings -> Privacy & Security -> Accessibility*.
+
+##### Đổi tên thành OhMyKey (30/08/2026) - hungdoansy:
 - OhMyKey là bản fork của OpenKey. Ứng dụng đổi bundle ID sang `com.hungdoansy.ohmykey`.
 - Thiết lập, macro và dữ liệu chuyển chế độ thông minh được **tự động chuyển** từ bản OpenKey cũ trong lần chạy đầu tiên.
-- Do bundle ID thay đổi, macOS coi đây là ứng dụng mới: bạn cần **cấp lại quyền Accessibility** trong *System Settings -> Privacy & Security -> Accessibility*.
 - Biểu tượng trên thanh menu được vẽ lại để dễ nhìn hơn trên nền sáng.
 
 ##### Lịch sử của OpenKey (bản gốc) ở phía dưới:
 
-##### OpenKey for Linux: (in development)
+##### OpenKey cho Linux: (đang phát triển)
 
 ##### Version 1.2 RC5: (26/08/2019)
 - Sửa lỗi không gõ được chữ "quởn".
@@ -68,46 +98,46 @@ Sửa vài lỗi nho nhỏ khác.
 - Hỗ trợ cho macOS bản cũ.
 
 ##### Version 1.0.17: (31/07/2019)
-- Add Simple Telex mode.
-- Black/White icon on menu bar.
-- Space and back key improved.
-- Modern orthography.
-- Custom switch key.
-- Quick telex (cc=ch, gg=gi, kk=kh, nn=ng, qq=qu, pp=ph, tt=th).
-- Support TextWrangler.
+- Thêm chế độ Simple Telex.
+- Icon đen/trắng trên thanh menu.
+- Cải thiện phím Space và Backspace.
+- Chính tả kiểu mới.
+- Tuỳ chỉnh phím chuyển.
+- Gõ nhanh Telex (cc=ch, gg=gi, kk=kh, nn=ng, qq=qu, pp=ph, tt=th).
+- Hỗ trợ TextWrangler.
 
 ##### Version 1.0.14: (09/04/2019)
-- Add case "uýt".
-- Improve typing English in Vietnamese mode.
+- Thêm trường hợp "uýt".
+- Cải thiện việc gõ English trong chế độ tiếng Việt.
 
 ##### Version 1.0.11: (27/02/2019)
-- Add case "chú thòong", "gòong".
+- Thêm trường hợp "chú thòong", "gòong".
 
 ##### Version 1.0.10: (26/02/2019)
-- Fix case "duocd".
+- Sửa trường hợp "duocd".
 
 ##### Version 1.0.9: (22/02/2019)
-- Fix incorrect word when switch language without pressing Space key.
+- Sửa từ sai khi chuyển ngôn ngữ mà không bấm phím Space.
 
 ##### Version 1.0.8: (19/02/2019)
-- Switch key: Control + Command + Space  --> Control + Z
+- Phím chuyển: Control + Command + Space  --> Control + Z
 
 ##### Version 1.0.7: (15/02/2019)
-- Fix case "duongd".
-- Fix end consonant "t".
+- Sửa trường hợp "duongd".
+- Sửa phụ âm cuối "t".
 
 ##### Version 1.0.6: (15/02/2019)
-- Fix case "quatw".
+- Sửa trường hợp "quatw".
 
 ##### Version 1.0.5: (13/02/2019)
-- Spelling enhanced.
-- Correct 1x menu icon.
+- Cải thiện chính tả.
+- Sửa icon thanh menu 1x.
 
 ##### Version 1.0.3: (11/02/2019)
-- Fix auto correct on Chrome.
+- Sửa auto correct trên Chrome.
 
 ##### Version 1.0: (11/02/2019)
-- First release.
+- Phát hành lần đầu.
 
 
 
